@@ -17,14 +17,25 @@ function setup() {
 
 
 function on_update(update){
-    data = JSON.parse(update)
-    if(data.key === undefined){
-        console.log(data)
+    let action = false;
+    data = JSON.parse(update);
+    if(data.key !== undefined){
+        art.keyPress(data.key);
+        action = true;
     }
-    else{
-        art.keyPress(data.key)
+    if(data.encoder_switch !== undefined ) {
+        art.encoderSwitch(data.encoder_switch);
+        action = true;
+    }
+    if(data.encoder !== undefined ) {
+        art.encoder(data.encoder);
+        action = true;
+    }
+    if(!action){
+        console.log("TODO", update);
     }
 }
+
 
 function draw() {
   background(255, 255, 255);

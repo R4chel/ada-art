@@ -3,9 +3,12 @@ function Shape(center, radius, color) {
     this.r = radius;
     this.color = color;
 
-    this.draw = function (shapeMode) {
+    this.draw = function ({shapeMode, destColor, lerpAmount}) {
         noStroke();
-        fill(this.color);
+        
+        stroke(this.color);
+        let fillColor = lerpColor(this.color,destColor,lerpAmount);
+        fill(fillColor)
         switch(shapeMode)
         {
             case "circle":

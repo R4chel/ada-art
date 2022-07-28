@@ -7,12 +7,16 @@ function Art(width, height){
     this.maxRadius = 50;
     this.shapeModeIndex = 0;
     this.shapeModes = ["circle", "square"];
+    this.lerpColors = [color("white"), color("black")]
+    this.lerpColorIndex = 0
+    this.lerpPercent = 0
 
     this.draw= function(){
         let shapeMode = this.shapeModes[this.shapeModeIndex];
+        let destColor = this.lerpColors[this.lerpColorIndex];
         for(let i = 0; i < this.shapes.length; i++){
             shape= this.shapes[i];
-            shape.draw(shapeMode);
+            shape.draw({shapeMode : shapeMode, destColor : destColor, lerpAmount: this.lerpPercent});
         }
     }
     
@@ -31,6 +35,16 @@ function Art(width, height){
         }
     }
 
+
+    this.encoderSwitch = function(encoder_switch_value){
+        if(encoder_switch_value){
+            this.lerpColorIndex = (this.lerpColorIndex + 1)% this.lerpColors.length;
+        }
+    }
+
+    this.encoder = function(value){
+        this.lerpPercent = value / 100;
+    }
     this.keyPress = function(key){
         switch(key){
         case 1:
