@@ -24,6 +24,13 @@ function Art(width, height){
         this.shapes.push(shape);
     }
 
+    this.removeShape = function (){
+        if(this.shapes.length > 0){
+            this.shapes.splice( Math.floor( Math.random()*this.shapes.length ), 1)
+
+        }
+    }
+
     this.keyPress = function(key){
         switch(key){
         case 1:
@@ -32,7 +39,9 @@ function Art(width, height){
         case 2:
             this.shapeModeIndex = (this.shapeModeIndex + 1)% this.shapeModes.length;
             break;
-           
+        case 10:
+            this.removeShape();
+            break;
         default:
             console.log("TODO");
 
