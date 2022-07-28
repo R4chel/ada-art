@@ -16,9 +16,10 @@ tones = [196, 220, 246, 262, 294, 330, 349, 392, 440, 494, 523, 587]
 
 debug = False
 while True:
-    key_event = macropad.keys.events.get()
+    kdey_event = macropad.keys.events.get()
     if key_event and key_event.pressed:
-        print("Key pressed: {}".format(key_event.key_number))
+        if debug:
+            print("Key pressed: {}".format(key_event.key_number))
         macropad.pixels[key_event.key_number] = colorwheel(
                 int(255 / 12) * key_event.key_number
             )
