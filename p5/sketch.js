@@ -82,6 +82,7 @@ function gotError(theerror) {
 
 function gotData() {
   let currentString = serial.readLine();
+    console.log("Got Data", currentString);
   trim(currentString);
   if (!currentString) return;
   console.log(currentString);
@@ -95,9 +96,8 @@ function draw() {
   // Polling method
  if (serial.available() > 0) {
   let data = serial.read();
+    
+     console.log("Read data", data);
   ellipse(50,50,data,data);
  }
 }
-
-
-
