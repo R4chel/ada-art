@@ -33,9 +33,9 @@ while True:
         write_msg(serial, message)
         if debug:
             print("Encoder switch: {}".format(macropad.encoder_switch))
-    if encoder_value != macropad.encoder_switch:
-        encoder_value = macropad.encoder_switch
-        message = {"encoder": encoder_switch_value}
+    if encoder_value != macropad.encoder:
+        encoder_value = macropad.encoder
+        message = {"encoder": encoder_value}
         write_msg(serial, message)
         if debug:
             print("Encoder: {}".format(macropad.encoder))
