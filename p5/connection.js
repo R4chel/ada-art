@@ -6,7 +6,6 @@ function Connection(on_data){
         let currentString = this.serial.readLine();
         trim(currentString);
         if (!currentString) return;
-        console.log(currentString);
         this.latestData = currentString;
         on_data(this.latestData);
     }

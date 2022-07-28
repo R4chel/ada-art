@@ -2,25 +2,30 @@ let connection;
 let art;
 
 function setup() {
-    console.log("1")
+    angleMode(RADIANS);
+    ellipseMode(RADIUS);
+     
     createCanvas(windowWidth, windowHeight);
-    console.log("2")
+    art = new Art(windowWidth, windowHeight)
+
     port = "/dev/tty.usbmodem1103";
     connection = new Connection(on_update);
-    console.log("3")
     connectionSetup(connection, port);
-    console.log("4")
-    art = new Art()
 
 }
 
 
 function on_update(update){
-    console.log("todo")
+    data = JSON.parse(update)
+    if(data.key === undefined){
+        console.log(data)
+    }
+    else{
+        art.keyPress(data.key)
+    }
 }
 
 function draw() {
   background(255, 255, 255);
-  fill(0, 0, 0);
-  text(connection.latestData, 10, 10);
+    art.draw();
 }
