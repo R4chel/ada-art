@@ -93,12 +93,10 @@ function draw() {
   fill(0, 0, 0);
   text(latestData, 10, 10);
   // Polling method
-  /*
  if (serial.available() > 0) {
   let data = serial.read();
   ellipse(50,50,data,data);
  }
- */
 }
 
 
