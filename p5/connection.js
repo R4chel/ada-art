@@ -8,7 +8,7 @@ function Connection(on_data){
         if (!currentString) return;
         console.log(currentString);
         this.latestData = currentString;
-        // on_data(this.latestData);
+        on_data(this.latestData);
     }
         
     this.serverConnected = function() {

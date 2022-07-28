@@ -1,4 +1,5 @@
 let connection;
+let art;
 
 function setup() {
     console.log("1")
@@ -9,12 +10,13 @@ function setup() {
     console.log("3")
     connectionSetup(connection, port);
     console.log("4")
+    art = new Art()
 
 }
 
 
 function on_update(update){
-    console.log(update)
+    console.log("todo")
 }
 
 function draw() {
