@@ -2,15 +2,10 @@ import board
 from rainbowio import colorwheel
 from adafruit_macropad import MacroPad
 from time import sleep
-
-import busio
-import digitalio
-
 import usb_cdc
 import json
-import io
 
-debug = true
+debug = True 
 
 # For most CircuitPython boards
 
