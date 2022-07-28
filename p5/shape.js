@@ -3,9 +3,21 @@ function Shape(center, radius, color) {
     this.r = radius;
     this.color = color;
 
-    this.draw = function () {
+    this.draw = function (shapeMode) {
         noStroke();
         fill(this.color);
-        circle(this.center.x,this.center.y, this.r);
+        switch(shapeMode)
+        {
+            case "circle":
+                circle(this.center.x,this.center.y, this.r);
+                break;
+            case "square":
+            square(this.center.x, this.center.y, this.r);
+            break;
+            default:
+            console.log(shapeMode)
+
+
+        }
     }
 }

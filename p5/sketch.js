@@ -4,6 +4,7 @@ let art;
 function setup() {
     angleMode(RADIANS);
     ellipseMode(RADIUS);
+    rectMode(RADIUS);
      
     createCanvas(windowWidth, windowHeight);
     art = new Art(windowWidth, windowHeight)

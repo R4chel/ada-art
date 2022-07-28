@@ -1,14 +1,18 @@
+
 function Art(width, height){
+    this.shapes = [];
     this.width = width;
     this.height = height;
-    this.shapes = []
     this.minRadius = 5;
     this.maxRadius = 50;
+    this.shapeModeIndex = 0;
+    this.shapeModes = ["circle", "square"];
 
     this.draw= function(){
+        let shapeMode = this.shapeModes[this.shapeModeIndex];
         for(let i = 0; i < this.shapes.length; i++){
             shape= this.shapes[i];
-            shape.draw();
+            shape.draw(shapeMode);
         }
     }
     
@@ -24,9 +28,14 @@ function Art(width, height){
         switch(key){
         case 1:
             this.addShape();
-            break
+            break;
+        case 2:
+            this.shapeModeIndex = (this.shapeModeIndex + 1)% this.shapeModes.length;
+            break;
+           
         default:
-            console.log("TODO")
+            console.log("TODO");
+
         }
         
     }
