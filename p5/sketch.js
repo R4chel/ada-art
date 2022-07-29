@@ -41,4 +41,6 @@ function on_update(update){
 function draw() {
   background(255, 255, 255);
     art.draw();
+    art.update();
 }
+
