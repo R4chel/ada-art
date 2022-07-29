@@ -10,6 +10,7 @@ function setup() {
     art = new Art(windowWidth, windowHeight)
 
     port = "/dev/tty.usbmodem1103";
+    port = "/dev/tty.usbmodem103";
     connection = new Connection(on_update);
     connectionSetup(connection, port);
 
