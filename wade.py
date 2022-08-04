@@ -2,10 +2,11 @@ import board
 from rainbowio import colorwheel
 from adafruit_macropad import MacroPad
 from time import sleep
+import time
 import usb_cdc
 import json
 
-debug = True 
+debug = False
 
 # For most CircuitPython boards
 
@@ -25,8 +26,14 @@ while True:
     if key_event and key_event.pressed:
         message = {"key": key_event.key_number}
         write_msg(serial, message)
+        macropad.pixels[key_event.key_number] = colorwheel(
+                int(255 / 12) * key_event.key_number
+            )
         if debug:
             print("Key pressed: {}".format(key_event.key_number))
+
+    else:
+        macropad.pixels.fill((0, 0, 0))
     if encoder_switch_value != macropad.encoder_switch:
         encoder_switch_value = macropad.encoder_switch
         message = {"encoder_switch": encoder_switch_value}

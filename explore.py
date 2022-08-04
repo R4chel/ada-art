@@ -16,7 +16,7 @@ tones = [196, 220, 246, 262, 294, 330, 349, 392, 440, 494, 523, 587]
 
 debug = False
 while True:
-    kdey_event = macropad.keys.events.get()
+    key_event = macropad.keys.events.get()
     if key_event and key_event.pressed:
         if debug:
             print("Key pressed: {}".format(key_event.key_number))
@@ -25,7 +25,7 @@ while True:
             )
         macropad.play_tone(tones[key_event.key_number], 0.5)
     else:
-            macropad.pixels.fill((0, 0, 0))
+        macropad.pixels.fill((0, 0, 0))
     if debug:
         print("Encoder: {}".format(macropad.encoder))
         print("Encoder switch: {}".format(macropad.encoder_switch))
