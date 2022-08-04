@@ -14,7 +14,7 @@ function Art(width, height) {
     this.maxVelocity = 20;
     this.oldEncoder = 0;
     this.changeColor = false;
-    this.maxColorDelta = 5;
+    this.maxColorDelta = 1;
 
     this.draw = function() {
         let shapeMode = this.shapeModes[this.shapeModeIndex];
@@ -37,7 +37,7 @@ function Art(width, height) {
                 wander: this.wander,
                 height: this.height,
                 width: this.width,
-                maxColorDelta
+                maxColorDelta : maxColorDelta
             });
         }
     }
@@ -102,14 +102,34 @@ function Art(width, height) {
         this.lerpPercent = value / 100;
         this.maxVelocity = abs(value);
         // this.updateSpeeds(value / 10 );
+
         if (value > this.oldEncoder) {
-            this.applyToAll((shape) => shape.updateSpeed((speed) => speed += random(-2, 5)));
+            this.applyToAll((shape) => shape.updateSpeed((speed) => (speed * randomGaussian(1.5, 0.1))));
         } else {
-            this.applyToAll((shape) => shape.updateSpeed((speed) => speed += random(-5, 2)));
+            this.applyToAll((shape) => shape.updateSpeed((speed) => {
+                return speed * randomGaussian(0.75, 0.1)
+            }));
         }
         this.oldEncoder = value
     }
 
+    this.splitAll = function() {
+        let newShapes = [];
+        this.applyToAll((shape) => {
+
+            let angle = random(0, Math.PI * 2);
+            let newCenter = {x : shape.center.x + cos(angle)*shape.radius,y : shape.center.y + sin(angle)*shape.radius};
+            shape.radius *= 0.5;
+            shape.velocity *= 2;
+            let newShape = new Shape({ center : newCenter, radius: shape.radius, fillColor: shape.fillColor, velocity: shape.velocity, direction: -shape.direction});
+            console.log(shape);
+            console.log(newShape);
+            newShapes.push(newShape);
+        });
+        console.log(this.shapes.length);
+        this.shapes.push(...newShapes);
+        console.log(this.shapes.length);
+    }
     this.keyPress = function(key) {
         switch (key) {
             case 1:
@@ -124,12 +144,30 @@ function Art(width, height) {
             case 4:
                 this.changeColor = !this.changeColor;
                 break;
+            case 5:
+                let amt = random(0, 2);
+                console.log(amt);
+                this.applyToAll((shape) => {
+                    shape.radius *= amt;
+                    shape.velocity *= 1 / amt;
+                });
+                break;
+            case 6:
+                this.applyToAll((shape) => {
+                    shape.radius *= update;
+                    shape.velocity *= 1 / update
+                });
+                break;
+            case 9:
+                this.splitAll();
+                break;
+
             case 10:
                 this.removeShape();
                 break;
             default:
                 console.log("TODO!", key);
-                   
+
 
         }
 

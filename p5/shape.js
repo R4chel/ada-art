@@ -33,23 +33,28 @@ function Shape({
         };
     }
 
-    this.update = function({width, height, wander, maxColorDelta}) {
-        this.center.x = this.center.x + cos(this.direction) * this.velocity;
-        this.center.y = this.center.y + sin(this.direction) * this.velocity;
-        if(this.center.x > width){
+    this.update = function({
+        width,
+        height,
+        wander,
+        maxColorDelta
+    }) {
+        this.center.x = this.center.x + cos(this.direction) * this.velocity + random(-wander,wander);
+        this.center.y = this.center.y + sin(this.direction) * this.velocity + random(-wander,wander);
+        if (this.center.x > width) {
             this.center.x -= width;
         }
-        if(this.center.x <0) {
+        if (this.center.x < 0) {
             this.center.x += width;
         }
-        if(this.center.y > height){
-            this.center.y -= height; 
+        if (this.center.y > height) {
+            this.center.y -= height;
         }
-        if(this.center.y < 0){
+        if (this.center.y < 0) {
             this.center.y += height;
         }
-        this.direction = this.direction + random(-wander, wander);
-        let radiusUpdate= random(-1,1);
+        this.direction = (this.direction + random(-wander, wander)) % (Math.PI * 2);
+        let radiusUpdate = random(-1, 1);
         this.radius += radiusUpdate;
         this.velocity -= radiusUpdate;
         this.fillColor.r = brownianUpdate(this.fillColor.r, maxColorDelta, 0, 255);
@@ -61,8 +66,8 @@ function Shape({
         this.direction += Math.PI;
     }
 
-    this.updateSpeed = function(f){
-        this.velocity = f(this.velocity)
+    this.updateSpeed = function(f) {
+        this.velocity = f(this.velocity);
     }
 }
 
