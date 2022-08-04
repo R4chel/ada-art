@@ -15,8 +15,13 @@ function Art(width, height) {
     this.oldEncoder = 0;
     this.changeColor = false;
     this.maxColorDelta = 1;
+    this.drawBackground = false;
+    this.minOpacity = 1;
 
     this.draw = function() {
+        if (this.drawBackground) {
+            background(255, 255, 255);
+        }
         let shapeMode = this.shapeModes[this.shapeModeIndex];
         let destColor = this.lerpColors[this.lerpColorIndex];
         for (let i = 0; i < this.shapes.length; i++) {
@@ -24,7 +29,8 @@ function Art(width, height) {
             shape.draw({
                 shapeMode: shapeMode,
                 destColor: destColor,
-                lerpAmount: this.lerpPercent
+                lerpAmount: this.lerpPercent,
+                opacity: random(this.minOpacity, 1)
             });
         }
     }
@@ -37,7 +43,7 @@ function Art(width, height) {
                 wander: this.wander,
                 height: this.height,
                 width: this.width,
-                maxColorDelta : maxColorDelta
+                maxColorDelta: maxColorDelta
             });
         }
     }
@@ -47,11 +53,7 @@ function Art(width, height) {
             x: random(0, this.width),
             y: random(0, this.height)
         };
-        let c = {
-            r: random(255),
-            g: random(255),
-            b: random(255)
-        };
+        let c = randomColor();
         let radius = random(this.minRadius, this.maxRadius);
         let shape = new Shape({
             center: center,
@@ -118,20 +120,28 @@ function Art(width, height) {
         this.applyToAll((shape) => {
 
             let angle = random(0, Math.PI * 2);
-            let newCenter = {x : shape.center.x + cos(angle)*shape.radius,y : shape.center.y + sin(angle)*shape.radius};
+            let newCenter = {
+                x: shape.center.x + cos(angle) * shape.radius,
+                y: shape.center.y + sin(angle) * shape.radius
+            };
             shape.radius *= 0.5;
             shape.velocity *= 2;
-            let newShape = new Shape({ center : newCenter, radius: shape.radius, fillColor: shape.fillColor, velocity: shape.velocity, direction: -shape.direction});
-            console.log(shape);
-            console.log(newShape);
+            let newShape = new Shape({
+                center: newCenter,
+                radius: shape.radius,
+                fillColor: shape.fillColor,
+                velocity: shape.velocity,
+                direction: -shape.direction
+            });
             newShapes.push(newShape);
         });
-        console.log(this.shapes.length);
         this.shapes.push(...newShapes);
-        console.log(this.shapes.length);
     }
     this.keyPress = function(key) {
         switch (key) {
+            case 0:
+                this.applyToAll((shape) => shape.color = randomColor());
+                break;
             case 1:
                 this.addShape();
                 break;
@@ -155,15 +165,24 @@ function Art(width, height) {
             case 6:
                 this.applyToAll((shape) => {
                     shape.radius *= update;
-                    shape.velocity *= 1 / update
+                    shape.velocity *= 1 / update;
                 });
+                break;
+            case 7:
+                this.drawBackground = !this.drawBackground;
+                break;
+            case 8:
+                this.wander *= gausssianRandom(1, 0.25);
+                this.wander = abs(this.wander);
                 break;
             case 9:
                 this.splitAll();
                 break;
-
             case 10:
                 this.removeShape();
+                break;
+            case 11:
+                this.minOpacity = random(0, 1);
                 break;
             default:
                 console.log("TODO!", key);
@@ -172,4 +191,13 @@ function Art(width, height) {
         }
 
     }
+}
+
+function randomColor() {
+
+    return {
+        r: random(255),
+        g: random(255),
+        b: random(255)
+    };
 }

@@ -10,14 +10,15 @@ function Shape({
     this.fillColor = fillColor;
     this.velocity = velocity;
     this.direction = direction === undefined ? random(0, Math.PI * 2) : direction;
+    
 
     this.draw = function({
         shapeMode,
         destColor,
-        lerpAmount
+        lerpAmount,
+        opacity
     }) {
-        noStroke();
-        let c = color(this.fillColor.r, this.fillColor.g, this.fillColor.b);
+        let c = color(this.fillColor.r, this.fillColor.g, this.fillColor.b, opacity);
         stroke(c);
         let fillColor = lerpColor(c, destColor, lerpAmount);
         fill(fillColor);
