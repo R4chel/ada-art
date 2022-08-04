@@ -140,7 +140,9 @@ function Art(width, height) {
     this.keyPress = function(key) {
         switch (key) {
             case 0:
-                this.applyToAll((shape) => shape.color = randomColor());
+            this.applyToAll((shape) => {
+                    let newColor = randomColor();
+                shape.fillColor = newColor; }); 
                 break;
             case 1:
                 this.addShape();
@@ -163,16 +165,17 @@ function Art(width, height) {
                 });
                 break;
             case 6:
+                let updateAmt = random(-5, 5);
                 this.applyToAll((shape) => {
-                    shape.radius *= update;
-                    shape.velocity *= 1 / update;
+                    shape.radius += updateAmt;
+                    shape.velocity -= updateAmt;
                 });
                 break;
             case 7:
                 this.drawBackground = !this.drawBackground;
                 break;
             case 8:
-                this.wander *= gausssianRandom(1, 0.25);
+                this.wander *= randomGaussian(1, 0.25);
                 this.wander = abs(this.wander);
                 break;
             case 9:
