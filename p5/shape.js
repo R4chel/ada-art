@@ -1,13 +1,13 @@
 function Shape({
     center,
     radius,
-    color,
+    fillColor,
     velocity,
     direction
 }) {
     this.center = center;
-    this.r = radius;
-    this.color = color;
+    this.radius = radius;
+    this.fillColor = fillColor;
     this.velocity = velocity;
     this.direction = direction === undefined ? random(0, Math.PI * 2) : direction;
 
@@ -17,22 +17,23 @@ function Shape({
         lerpAmount
     }) {
         noStroke();
-        stroke(this.color);
-        let fillColor = lerpColor(this.color, destColor, lerpAmount);
+        let c = color(this.fillColor.r, this.fillColor.g, this.fillColor.b);
+        stroke(c);
+        let fillColor = lerpColor(c, destColor, lerpAmount);
         fill(fillColor);
         switch (shapeMode) {
             case "circle":
-                circle(this.center.x, this.center.y, this.r);
+                circle(this.center.x, this.center.y, this.radius);
                 break;
             case "square":
-                square(this.center.x, this.center.y, this.r);
+                square(this.center.x, this.center.y, this.radius);
                 break;
             default:
                 console.log(shapeMode);
         };
     }
 
-    this.update = function({width, height, wander}) {
+    this.update = function({width, height, wander, maxColorDelta}) {
         this.center.x = this.center.x + cos(this.direction) * this.velocity;
         this.center.y = this.center.y + sin(this.direction) * this.velocity;
         if(this.center.x > width){
@@ -48,8 +49,12 @@ function Shape({
             this.center.y += height;
         }
         this.direction = this.direction + random(-wander, wander);
-        this.radius += random(-1,1);
-        
+        let radiusUpdate= random(-1,1);
+        this.radius += radiusUpdate;
+        this.velocity -= radiusUpdate;
+        this.fillColor.r = brownianUpdate(this.fillColor.r, maxColorDelta, 0, 255);
+        this.fillColor.g = brownianUpdate(this.fillColor.g, maxColorDelta, 0, 255);
+        this.fillColor.b = brownianUpdate(this.fillColor.b, maxColorDelta, 0, 255);
     }
 
     this.reverse = function() {
