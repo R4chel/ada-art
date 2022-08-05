@@ -5,10 +5,11 @@ function Art(width, height) {
     this.minRadius = 5;
     this.maxRadius = 50;
     this.shapeModeIndex = 0;
-    this.shapeModes = ["circle", "square"];
+    this.shapeModes = ["circle", "square", "line"];
     this.lerpColors = [color("white"), color("black")];
     this.lerpColorIndex = 0;
     this.lerpPercent = 0;
+    this.dontLerp = true;
     this.wander = Math.PI / 10;
     this.minVelocity = 0;
     this.maxVelocity = 20;
@@ -16,7 +17,8 @@ function Art(width, height) {
     this.changeColor = false;
     this.maxColorDelta = 1;
     this.drawBackground = false;
-    this.minOpacity = 1;
+    this.minOpacity = 255;
+    this.maxShapes = 100;
 
     this.draw = function() {
         if (this.drawBackground) {
@@ -24,12 +26,13 @@ function Art(width, height) {
         }
         let shapeMode = this.shapeModes[this.shapeModeIndex];
         let destColor = this.lerpColors[this.lerpColorIndex];
+        let lerpAmount = this.dontLerp ? 0 : this.lerpPercent;
         for (let i = 0; i < this.shapes.length; i++) {
             let shape = this.shapes[i];
             shape.draw({
                 shapeMode: shapeMode,
                 destColor: destColor,
-                lerpAmount: this.lerpPercent,
+                lerpAmount: lerpAmount,
                 opacity: random(this.minOpacity, 1)
             });
         }
@@ -78,7 +81,7 @@ function Art(width, height) {
 
     this.removeShape = function() {
         if (this.shapes.length > 0) {
-            this.shapes.splice(Math.floor(Math.random() * this.shapes.length), 1)
+            this.shapes.splice(Math.floor(Math.random() * this.shapes.length), 1);
 
         }
     }
@@ -109,15 +112,17 @@ function Art(width, height) {
             this.applyToAll((shape) => shape.updateSpeed((speed) => (speed * randomGaussian(1.5, 0.1))));
         } else {
             this.applyToAll((shape) => shape.updateSpeed((speed) => {
-                return speed * randomGaussian(0.75, 0.1)
+                return speed * randomGaussian(0.75, 0.1);
             }));
         }
-        this.oldEncoder = value
+        this.oldEncoder = value;
     }
 
     this.splitAll = function() {
         let newShapes = [];
         this.applyToAll((shape) => {
+            if(shape.radius > this.minRadius && this.shapes.length + newShapes.length < this.maxShapes){
+                
 
             let angle = random(0, Math.PI * 2);
             let newCenter = {
@@ -134,6 +139,7 @@ function Art(width, height) {
                 direction: -shape.direction
             });
             newShapes.push(newShape);
+            }
         });
         this.shapes.push(...newShapes);
     }
@@ -157,19 +163,21 @@ function Art(width, height) {
                 this.changeColor = !this.changeColor;
                 break;
             case 5:
+            
                 let amt = random(0, 2);
                 console.log(amt);
                 this.applyToAll((shape) => {
                     shape.radius *= amt;
                     shape.velocity *= 1 / amt;
                 });
+            // let updateAmt = random(-5, 5);
+            // this.applyToAll((shape) => {
+            //     shape.radius += updateAmt;
+            //     shape.velocity -= updateAmt;
+            // });
                 break;
             case 6:
-                let updateAmt = random(-5, 5);
-                this.applyToAll((shape) => {
-                    shape.radius += updateAmt;
-                    shape.velocity -= updateAmt;
-                });
+            this.dontLerp = !this.dontLerp; 
                 break;
             case 7:
                 this.drawBackground = !this.drawBackground;
@@ -185,7 +193,8 @@ function Art(width, height) {
                 this.removeShape();
                 break;
             case 11:
-                this.minOpacity = random(0, 1);
+                this.minOpacity = random([0, 255]);
+            
                 break;
             default:
                 console.log("TODO!", key);

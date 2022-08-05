@@ -6,7 +6,7 @@ import time
 import usb_cdc
 import json
 
-debug = False
+debug = True
 
 # For most CircuitPython boards
 

@@ -1,5 +1,6 @@
 let connection;
 let art;
+let debug = true;
 
 function setup() {
     angleMode(RADIANS);
@@ -19,6 +20,10 @@ function setup() {
 function on_update(update){
     let action = false;
     data = JSON.parse(update);
+    if(debug){
+        console.log("hi");
+        console.log(action);
+    }
     if(data.key !== undefined){
         art.keyPress(data.key);
         action = true;

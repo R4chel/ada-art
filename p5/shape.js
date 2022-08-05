@@ -10,7 +10,8 @@ function Shape({
     this.fillColor = fillColor;
     this.velocity = velocity;
     this.direction = direction === undefined ? random(0, Math.PI * 2) : direction;
-    
+    this.previousCenter = center;
+
 
     this.draw = function({
         shapeMode,
@@ -29,6 +30,10 @@ function Shape({
             case "square":
                 square(this.center.x, this.center.y, this.radius);
                 break;
+            case "line":
+                strokeWeight(3);
+                line(this.previousCenter.x, this.previousCenter.y, this.center.x, this.center.y);
+                break;
             default:
                 console.log(shapeMode);
         };
@@ -40,8 +45,12 @@ function Shape({
         wander,
         maxColorDelta
     }) {
-        this.center.x = this.center.x + cos(this.direction) * this.velocity + random(-wander,wander);
-        this.center.y = this.center.y + sin(this.direction) * this.velocity + random(-wander,wander);
+        this.previousCenter = {
+            x: this.center.x,
+            y: this.center.y
+        };
+        this.center.x = this.center.x + cos(this.direction) * this.velocity + random(-wander, wander);
+        this.center.y = this.center.y + sin(this.direction) * this.velocity + random(-wander, wander);
         if (this.center.x > width) {
             this.center.x -= width;
         }
