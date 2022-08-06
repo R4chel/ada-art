@@ -161,11 +161,13 @@ function Art(width, height) {
                 break;
             case 4:
                 this.changeColor = !this.changeColor;
+            this.maxColorDelta += 1;  
+            console.log(this.changeColor)
                 break;
+
             case 5:
             
                 let amt = random(0, 2);
-                console.log(amt);
                 this.applyToAll((shape) => {
                     shape.radius *= amt;
                     shape.velocity *= 1 / amt;
