@@ -3,7 +3,8 @@ function Shape({
     radius,
     fillColor,
     velocity,
-    direction
+    direction,
+    maxPoints,
 }) {
     this.center = center;
     this.radius = radius;
@@ -11,7 +12,8 @@ function Shape({
     this.velocity = velocity;
     this.direction = direction === undefined ? random(0, Math.PI * 2) : direction;
     this.previousCenter = center;
-
+    this.maxPoints = maxPoints;
+    this.points = [center];
 
     this.draw = function({
         shapeMode,
@@ -34,6 +36,24 @@ function Shape({
                 strokeWeight(3);
                 line(this.previousCenter.x, this.previousCenter.y, this.center.x, this.center.y);
                 break;
+        case "line2":
+            noFill();
+            beginShape();
+            for(let i = 0; i < this.points.length; i++){
+                let p = this.points[i];
+                curveVertex(p.x,p.y);
+            }
+            endShape();
+            break;
+        case "line3":
+            noFill();
+            beginShape();
+            for(let i = 0; i < this.points.length; i++){
+                let p = this.points[i];
+                curveVertex(p.x,p.y);
+            }
+            endShape();
+            break;
             default:
                 console.log(shapeMode);
         };
@@ -49,20 +69,26 @@ function Shape({
             x: this.center.x,
             y: this.center.y
         };
-        this.center.x = this.center.x + cos(this.direction) * this.velocity + random(-wander, wander);
-        this.center.y = this.center.y + sin(this.direction) * this.velocity + random(-wander, wander);
-        if (this.center.x > width) {
-            this.center.x -= width;
+        let newCenter = {x: this.center.x + cos(this.direction) * this.velocity + random(-wander, wander), 
+                         y :this.center.y + sin(this.direction) * this.velocity + random(-wander, wander)};
+       
+        if (newCenter.x > width) {
+            newCenter.x -= width;
         }
-        if (this.center.x < 0) {
-            this.center.x += width;
+        if (newCenter.x < 0) {
+            newCenter.x += width;
         }
-        if (this.center.y > height) {
-            this.center.y -= height;
+        if (newCenter.y > height) {
+            newCenter.y -= height;
         }
-        if (this.center.y < 0) {
-            this.center.y += height;
+        if (newCenter.y < 0) {
+            newCenter.y += height;
         }
+        this.points.push(newCenter);
+        if(this.points.length > this.maxPoints){
+            this.points.shift();
+        }
+        this.center = newCenter;
         this.direction = (this.direction + random(-wander, wander)) % (Math.PI * 2);
         let radiusUpdate = random(-1, 1);
         this.radius += radiusUpdate;
@@ -81,8 +107,8 @@ function Shape({
     }
 }
 
-function brownianUpdate(x, delta, min, max) {
-    x += random(-1 * delta, delta);
-    let remainder = x % (max - min);
-    return remainder > 0 ? remainder + min : remainder + max;
+function brownianUpdate(x, delta, low, high) {
+    let y = x + random(-delta, delta);
+    return min(high, max(y, low));
 }
+

@@ -5,7 +5,7 @@ function Art(width, height) {
     this.minRadius = 5;
     this.maxRadius = 50;
     this.shapeModeIndex = 0;
-    this.shapeModes = ["circle", "square", "line"];
+    this.shapeModes = ["circle", "square", "line", "line2","line3"];
     this.lerpColors = [color("white"), color("black")];
     this.lerpColorIndex = 0;
     this.lerpPercent = 0;
@@ -19,6 +19,8 @@ function Art(width, height) {
     this.drawBackground = false;
     this.minOpacity = 255;
     this.maxShapes = 100;
+    this.maxPoints = 100;
+     
 
     this.draw = function() {
         if (this.drawBackground) {
@@ -62,7 +64,8 @@ function Art(width, height) {
             center: center,
             radius: radius,
             fillColor: c,
-            velocity: random(this.minVelocity, this.maxVelocity)
+            velocity: random(this.minVelocity, this.maxVelocity),
+            maxPoints : this.maxPoints
         });
 
         this.shapes.push(shape);
@@ -162,7 +165,7 @@ function Art(width, height) {
             case 4:
                 this.changeColor = !this.changeColor;
             this.maxColorDelta += 1;  
-            console.log(this.changeColor)
+            console.log(this.changeColor, this.maxColorDelta)
                 break;
 
             case 5:
@@ -195,7 +198,7 @@ function Art(width, height) {
                 this.removeShape();
                 break;
             case 11:
-                this.minOpacity = random([0, 255]);
+                this.minOpacity = random([150, 255]);
             
                 break;
             default:
