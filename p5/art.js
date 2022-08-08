@@ -10,7 +10,7 @@ function Art(canvas, theShader) {
         theShader.setUniform('resolution', [this.canvas.width, this.canvas.height]);
         theShader.setUniform('mouse', map(mouseX, 0, width, 0, 7));
         theShader.setUniform('time', frameCount * this.timeModifier);
-        theShader.setUniform('foo', this.key);
+        theShader.setUniform('key', this.key);
         rect(0, 0, this.canvas.width, this.canvas.height);
     }
 
