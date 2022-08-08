@@ -18,8 +18,14 @@ vec4 PrettyColors(){
      if (key == 1){
           return vec4(sin(time),st,1.0);
      }
+     if (key == 2){
+          return vec4(sin(st.y),sin(time*time),cos(st.y),1.0);
+     }
+     if (key == 3){
+          return vec4(cos(st.x),sin(time),tan(st.y),1.0);
+     }
      
-     return vec4(st,tan(time*key_float),1.0);
+     return vec4(cos(st.x),sin(st.y),sin(time*key_float),1.0);
 }
 
 void main() {
