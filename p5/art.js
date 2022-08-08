@@ -1,7 +1,6 @@
-function Art(width, height) {
+function Art(canvas) {
     this.shapes = [];
-    this.width = width;
-    this.height = height;
+    this.canvas = canvas;
     this.minRadius = 5;
     this.maxRadius = 50;
     this.shapeModeIndex = 0;
@@ -45,19 +44,15 @@ function Art(width, height) {
         for (let i = 0; i < this.shapes.length; i++) {
             shape = this.shapes[i];
             shape.update({
+                canvas: this.canvas,
                 wander: this.wander,
-                height: this.height,
-                width: this.width,
                 maxColorDelta: maxColorDelta
             });
         }
     }
 
     this.addShape = function() {
-        let center = {
-            x: random(0, this.width),
-            y: random(0, this.height)
-        };
+        let center = this.canvas.randomPoint();
         let c = randomColor();
         let radius = random(this.minRadius, this.maxRadius);
         let shape = new Shape({

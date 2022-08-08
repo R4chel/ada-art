@@ -60,8 +60,7 @@ function Shape({
     }
 
     this.update = function({
-        width,
-        height,
+        canvas,
         wander,
         maxColorDelta
     }) {
@@ -72,17 +71,17 @@ function Shape({
         let newCenter = {x: this.center.x + cos(this.direction) * this.velocity + random(-wander, wander), 
                          y :this.center.y + sin(this.direction) * this.velocity + random(-wander, wander)};
        
-        if (newCenter.x > width) {
-            newCenter.x -= width;
+        if (newCenter.x > canvas.width) {
+            newCenter.x -= canvas.width;
         }
         if (newCenter.x < 0) {
-            newCenter.x += width;
+            newCenter.x += canvas.width;
         }
-        if (newCenter.y > height) {
-            newCenter.y -= height;
+        if (newCenter.y > canvas.height) {
+            newCenter.y -= canvas.height;
         }
         if (newCenter.y < 0) {
-            newCenter.y += height;
+            newCenter.y += canvas.height;
         }
         this.points.push(newCenter);
         if(this.points.length > this.maxPoints){

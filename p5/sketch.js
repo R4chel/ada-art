@@ -6,9 +6,8 @@ function setup() {
     angleMode(RADIANS);
     ellipseMode(RADIUS);
     rectMode(RADIUS);
-     
-    createCanvas(windowWidth, windowHeight);
-    art = new Art(windowWidth, windowHeight)
+    let canvas = new Canvas(windowWidth, windowHeight); 
+    art = new Art(canvas);
 
     port = "/dev/tty.usbmodem1103";
     // port = "/dev/tty.usbmodem103";
