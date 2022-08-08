@@ -1,18 +1,26 @@
 let connection;
 let art;
 let debug = true;
+let theShader;
 
 function setup() {
     angleMode(RADIANS);
     ellipseMode(RADIUS);
     rectMode(RADIUS);
     let canvas = new Canvas(windowWidth, windowHeight); 
-    art = new Art(canvas);
+    art = new Art(canvas, theShader);
 
     port = "/dev/tty.usbmodem1103";
     // port = "/dev/tty.usbmodem103";
     connection = new Connection(on_update);
     connectionSetup(connection, port);
+    
+}
+
+function preload(){
+
+    theShader = loadShader('shader.vert', 'shader.frag');
+
 }
 
 
@@ -38,6 +46,7 @@ function on_update(update){
 
 
 function draw() {
+
     art.draw();
     art.update();
 }
