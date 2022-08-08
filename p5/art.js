@@ -2,6 +2,7 @@ function Art(canvas, theShader) {
     this.theShader = theShader;
     this.canvas = canvas;
     this.timeModifier = 0.01;
+    this.key=0;
 
 
     this.draw = function() {
@@ -9,6 +10,7 @@ function Art(canvas, theShader) {
         theShader.setUniform('resolution', [this.canvas.width, this.canvas.height]);
         theShader.setUniform('mouse', map(mouseX, 0, width, 0, 7));
         theShader.setUniform('time', frameCount * this.timeModifier);
+        theShader.setUniform('foo', this.key);
         rect(0, 0, this.canvas.width, this.canvas.height);
     }
 
@@ -16,12 +18,6 @@ function Art(canvas, theShader) {
 
 
     this.encoderSwitch = function(encoder_switch_value) {
-        if (encoder_switch_value) {
-            this.lerpColorIndex = (this.lerpColorIndex + 1) % this.lerpColors.length;
-            this.applyToAll((shape) => shape.updateSpeed((speed) => speed / 2));
-        }
-        this.reverseAll();
-
     }
 
 
@@ -29,6 +25,7 @@ function Art(canvas, theShader) {
     }
 
     this.keyPress = function(key) {
+        this.key = key;
         switch (key) {
             case 0:
                 this.timeModifier = 0.01;
