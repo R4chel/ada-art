@@ -10,8 +10,20 @@ uniform int key;
 
 // Plot a line on Y using a value between 0.0-1.0
 float plot(vec2 st) {
-  return smoothstep(0.02, 0.0, cos(st.x) * sin(st.y) * sin(time + st.y + st.x));
+  return smoothstep(0.02, 0.0, sin(time + st.y + st.x));
+  // return smoothstep(0.02, 0.0, cos(st.x) * sin(st.y) * sin(time + st.y + st.x));
 }
+//  Function from Iñigo Quiles
+//  https://www.shadertoy.com/view/MsS3Wc
+vec3 hsb2rgb( in vec3 c ){
+  vec3 rgb = clamp(abs(mod(c.x*6.0+vec3(0.0,4.0,2.0),
+                           6.0)-3.0)-1.0,
+                   0.0,
+                   1.0 );
+  rgb = rgb*rgb*(3.0-2.0*rgb);
+  return c.z * mix( vec3(1.0), rgb, c.y);
+}
+
 
 vec4 pretty_colors() {
   float key_float = float(key);
@@ -23,7 +35,15 @@ vec4 pretty_colors() {
     return vec4(st, cos(time), 1.0);
   }
   if (key == 1) {
-    return vec4(sin(time), st, 1.0);
+    // return vec4(sin(time), st, 1.0);
+    vec2 toCenter = vec2(sin(time))-st;
+    float angle = atan(toCenter.y,toCenter.x);
+    float radius = length(toCenter)*2.0;
+
+    // Map the angle (-PI to PI) to the Hue (from 0 to 1)
+    // and the Saturation to the radius
+    color = hsb2rgb(vec3((angle/TWO_PI)+0.5,radius,1.0));
+    return vec4(color, 1.0);
   }
   if (key == 2) {
     return vec4(sin(st.y + st.x), sin(st.x), cos(st.y), 1.0);
