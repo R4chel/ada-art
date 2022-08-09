@@ -31,14 +31,19 @@ vec4 pretty_colors() {
   float y = st.x;
   float pct = plot(st);
   vec3 color = vec3(y);
+
+  vec2 toCenter = vec2(0.5-st);
+  float angle = atan(toCenter.y,toCenter.x);
+  float radius = length(toCenter)*2.0;
   if (key == 0) {
     return vec4(st, cos(time), 1.0);
   }
   if (key == 1) {
     // return vec4(sin(time), st, 1.0);
-    vec2 toCenter = vec2(sin(time))-st;
-    float angle = atan(toCenter.y,toCenter.x);
-    float radius = length(toCenter)*2.0;
+    toCenter = vec2(abs(sin(time)-st));
+    angle = atan(toCenter.y,toCenter.x);
+    radius = length(toCenter)*2.0;
+
 
     // Map the angle (-PI to PI) to the Hue (from 0 to 1)
     // and the Saturation to the radius
@@ -52,9 +57,9 @@ vec4 pretty_colors() {
     return vec4(cos(st.x), sin(st.y), sin(time * key_float), 1.0);
   }
   if (key == 4) {
-    return vec4((1.0 - pct) * color +
-                    pct * vec3(st.x * st.y, fract(st.y + st.x), 0.0),
-                1.0);
+    angle = angle + cos(time);
+    color = hsb2rgb(vec3((angle/TWO_PI)+0.5,radius,1.0));
+    return vec4(color, 1.0);
   }
 
   if (key == 5) {
