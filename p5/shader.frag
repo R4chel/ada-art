@@ -12,7 +12,7 @@ float key_float = float(key);
 
 // Plot a line on Y using a value between 0.0-1.0
 float plot(vec2 st) {    
-    return smoothstep(0.02, 0.0, sin(time + st.y +st.x));
+    return smoothstep(0.02, 0.0, cos(st.x)*sin(st.y)*sin(time + st.y +st.x));
 }
 
 vec4 pretty_colors() {
