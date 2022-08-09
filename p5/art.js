@@ -22,20 +22,22 @@ function Art(canvas, theShader) {
 
 
     this.encoder = function(value) {
+        if(value < 10){
+            console.log("TODO, deal with small numbers");
+        }
+        else{
+            this.timeModifier = 0.01 + 0.001 * value;
+            
+        }
     }
 
     this.keyPress = function(key) {
         this.key = key;
         switch (key) {
             case 0:
-                this.timeModifier = 0.01;
-                break;
 
             case 1:
-                this.timeModifier *= 2;
-                break;
             case 2:
-                this.timeModifier *= 0.5;
             case 3:
             case 4:
             case 5:
