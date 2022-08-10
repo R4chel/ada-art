@@ -2,6 +2,11 @@ let connection;
 let art;
 let debug = true;
 
+let mic, micLevel;
+let fft;
+let frequencies = ["bass", "lowMid", "mid", "highMid", "treble"];
+
+
 function setup() {
     angleMode(RADIANS);
     ellipseMode(RADIUS);
@@ -13,6 +18,11 @@ function setup() {
     // port = "/dev/tty.usbmodem103";
     connection = new Connection(on_update);
     connectionSetup(connection, port);
+
+    mic = new p5.AudioIn();
+    fft = new p5.FFT();
+    mic.connect(fft);
+    mic.start();
 }
 
 
@@ -38,7 +48,9 @@ function on_update(update){
 
 
 function draw() {
-    art.draw();
+    let spectrum = fft.analyze();
+    let soundwave = fft.waveform();
+    art.draw(soundwave);
     art.update();
 }
 

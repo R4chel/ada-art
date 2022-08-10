@@ -13,10 +13,13 @@ function Art(canvas) {
     this.move = true;
 
 
-    this.draw = function() {
+
+    this.draw = function(soundwave) {
         for (let i = 0; i < this.shapes.length; i++) {
-            this.shapes[i].draw({
-                fillMode: this.fillModes[this.fillModeIndex]
+            this.shapes[i].drawSound({
+                fillMode: this.fillModes[this.fillModeIndex],
+                soundwave: soundwave,
+                canvas:  this.canvas
             });
         }
     }
@@ -36,9 +39,9 @@ function Art(canvas) {
     }
 
     this.encoder = function(value) {
-        if (value > -20) {
-            frameRate(value + 20);
-        }
+        // if (value > -20) {
+        //     frameRate(value + 20);
+        // }
     }
 
     this.addShape = function() {

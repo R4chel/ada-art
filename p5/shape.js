@@ -55,6 +55,37 @@ function Shape({
 
     }
 
+    this.drawSound = function({fillMode, soundwave, canvas }) {
+        switch (fillMode){
+        case "noFill":
+            noFill();
+            break;
+        case "filled":
+            fill(toColor(this.color));
+            break;
+
+        case "whiteFill":
+            fill("white");
+            break;
+        case "randomOpacity":
+            fill(this.color.r, this.color.g,this.color.b, random(255));
+            break;
+
+
+        };
+        stroke(toColor(this.color));
+        beginShape();
+        for (let i = 0; i < soundwave.length; i++) {
+            let theta = i * 2 * PI / soundwave.length;
+            let r = map( soundwave[i], -1, 1, 0, this.radius * 5);
+            console.log(r, soundwave[i]);
+            let x = cos(theta) * (r) + this.center.x;
+            let y = sin(theta) * ( r) + this.center.y;
+            curveVertex(x, y);
+        }
+        endShape(CLOSE);
+
+    }
     this.update = function(canvas){
         for (let i = 0; i < numPoints; i++) {
             
