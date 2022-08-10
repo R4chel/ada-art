@@ -1,4 +1,4 @@
-const NUM_COLOR_MODES = 12;
+const NUM_COLOR_MODES = 8;
 
 function Art(canvas) {
     this.canvas = canvas;
@@ -65,7 +65,7 @@ function Art(canvas) {
                 break;
             case 9:
 
-                this.colorMode = (this.colorMode + 1) % NUM_COLOR_MODES;
+                this.colorIndex = (this.colorIndex + 1) % NUM_COLOR_MODES;
                 break;
             case 10:
                 this.move = !this.move;
@@ -129,7 +129,7 @@ function Art(canvas) {
                     r: vals[1], g: vals[1], b: vals[1]
                 };
             case 7:
-
+            // IF YOU ADD THINGS HERE UPDATE NUM COLOR MODES 
             case 8:
             case 9:
             case 10:
