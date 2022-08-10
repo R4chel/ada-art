@@ -59,15 +59,17 @@ function Shape({
         for (let i = 0; i < numPoints; i++) {
             
             let p = this.points[i];
-            let update = randomGaussian(( this.radius - p.r ) / 2, this.noise);
+            let update_mean =
+                (p.r > 2 * radius || p.r < radius / 2) ? ( this.radius - p.r ) / 2 : 0;
+            let update = randomGaussian(update_mean, this.noise);
             p.r += update;
             if(p.r + this.radius < 5){
                 p.r += 5;
             }
         }
 
-        let center_x_update = randomGaussian(0, this.noise /2);
-        let center_y_update = randomGaussian(0, this.noise /2 );
+        let center_x_update = randomGaussian(0, this.noise);
+        let center_y_update = randomGaussian(0, this.noise);
         this.center.x = constrain(center.x+center_x_update, 0, canvas.width);
         this.center.y = constrain(center.y+center_y_update, 0, canvas.height);
 

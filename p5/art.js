@@ -1,3 +1,5 @@
+const NUM_COLOR_MODES = 12;
+
 function Art(canvas) {
     this.canvas = canvas;
     this.shapes = [];
@@ -8,17 +10,23 @@ function Art(canvas) {
     this.noise = 5;
     this.fillModes = ["filled", "noFill", "whiteFill", "randomOpacity"]
     this.fillModeIndex = 0;
+    this.move = true;
 
 
     this.draw = function() {
         for (let i = 0; i < this.shapes.length; i++) {
-            this.shapes[i].draw({fillMode: this.fillModes[this.fillModeIndex]});
+            this.shapes[i].draw({
+                fillMode: this.fillModes[this.fillModeIndex]
+            });
         }
     }
 
     this.update = function() {
-        for (let i = 0; i < this.shapes.length; i++) {
-            this.shapes[i].update(this.canvas);
+        if (this.move) {
+
+            for (let i = 0; i < this.shapes.length; i++) {
+                this.shapes[i].update(this.canvas);
+            }
         }
 
     }
@@ -28,8 +36,8 @@ function Art(canvas) {
     }
 
     this.encoder = function(value) {
-        if(value > -20){
-            frameRate(value + 20)
+        if (value > -20) {
+            frameRate(value + 20);
         }
     }
 
@@ -45,6 +53,7 @@ function Art(canvas) {
         this.shapes.push(s);
     }
 
+    
     this.keyPress = function(key) {
         console.log("TODO", key);
         switch (key) {
@@ -52,8 +61,16 @@ function Art(canvas) {
                 this.addShape();
                 break;
             case 1:
-            this.fillModeIndex = (this.fillModeIndex + 1) % this.fillModes.length;
-            break;
+                this.fillModeIndex = (this.fillModeIndex + 1) % this.fillModes.length;
+                break;
+            case 9:
+
+                this.colorMode = (this.colorMode + 1) % NUM_COLOR_MODES;
+                break;
+            case 10:
+                this.move = !this.move;
+                break;
+            case 11:
             case 2:
             case 3:
             case 4:
@@ -61,9 +78,6 @@ function Art(canvas) {
             case 6:
             case 7:
             case 8:
-            case 9:
-            case 10:
-            case 11:
             default:
                 console.log("TODO!", key);
         }
@@ -120,6 +134,7 @@ function Art(canvas) {
             case 9:
             case 10:
             case 11:
+
             default:
                 return {
                     r: random(255), g: random(255), b: random(255)
