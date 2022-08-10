@@ -1,11 +1,22 @@
 function Art(canvas) {
     this.canvas = canvas;
+    this.shapes = [];
+    this.minRadius = 5;
+    this.maxRadius = 100;
+    this.colorIndex = 0;
+    this.numPoints = 50;
+    this.noise = 5;
 
     this.draw = function() {
-
+        for (let i = 0; i < this.shapes.length; i++) {
+            this.shapes[i].draw();
+        }
     }
 
     this.update = function() {
+        for (let i = 0; i < this.shapes.length; i++) {
+            this.shapes[i].update(this.canvas);
+        }
 
     }
 
@@ -17,8 +28,18 @@ function Art(canvas) {
         console.log("TODO: encoder", value);
     }
 
+    this.addShape = function() {
+        this.shapes.push(new Shape({
+            center: this.canvas.randomPoint(),
+            radius: floor(random(this.minRadius, this.maxRadius + 1)),
+            color: this.randomColor(),
+            numPoints: this.numPoints,
+            noise: this.noise,
+        }));
+    }
+
     this.keyPress = function(key) {
-        console.log("TODO", key)
+        console.log("TODO", key);
         switch (key) {
             case 0:
             case 1:
@@ -35,6 +56,65 @@ function Art(canvas) {
             default:
                 console.log("TODO!", key);
         }
+        if (this.shapes.length == 0) {
+            this.colorIndex = key;
+            if (key > 6) {
+                this.minRadius += key;
+                this.maxRadius += key;
+            } else {
+                this.minRadius -= key;
+                this.maxRadius -= key;
+            }
+            this.addShape();
+        }
 
+    }
+
+    this.randomColor = function() {
+
+        let vals = [...Array(3)].map(() => random(255));
+        vals.sort();
+        switch (this.colorIndex) {
+            case 0:
+                return {
+                    r: vals[0], g: vals[1], b: vals[2]
+                };
+            case 1:
+                return {
+                    r: vals[0], g: vals[2], b: vals[1]
+                };
+            case 2:
+                return {
+                    r: vals[1], g: vals[0], b: vals[2]
+                };
+            case 3:
+                return {
+                    r: vals[1], g: vals[2], b: vals[1]
+                };
+            case 4:
+                return {
+                    r: vals[2], g: vals[0], b: vals[1]
+                };
+            case 5:
+                return {
+                    r: vals[2], g: vals[1], b: vals[0]
+                };
+            case 6:
+                return {
+                    r: vals[1], g: vals[1], b: vals[1]
+                };
+            case 7:
+
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            default:
+                return {
+                    r: random(255), g: random(255), b: random(255)
+                };
+
+                console.log("TODO!", key);
+        }
     }
 }
