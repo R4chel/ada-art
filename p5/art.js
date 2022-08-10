@@ -29,19 +29,24 @@ function Art(canvas) {
     }
 
     this.addShape = function() {
-        this.shapes.push(new Shape({
-            center: this.canvas.randomPoint(),
-            radius: floor(random(this.minRadius, this.maxRadius + 1)),
-            color: this.randomColor(),
-            numPoints: this.numPoints,
-            noise: this.noise,
-        }));
+        let s =
+            new Shape({
+                center: this.canvas.randomPoint(),
+                radius: floor(random(this.minRadius, this.maxRadius + 1)),
+                color: this.randomColor(),
+                numPoints: this.numPoints,
+                noise: this.noise,
+            });
+        console.log(s.center);
+        this.shapes.push(s);
     }
 
     this.keyPress = function(key) {
         console.log("TODO", key);
         switch (key) {
             case 0:
+                this.addShape();
+                break;
             case 1:
             case 2:
             case 3:
