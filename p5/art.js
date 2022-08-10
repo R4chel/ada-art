@@ -25,7 +25,9 @@ function Art(canvas) {
     }
 
     this.encoder = function(value) {
-        console.log("TODO: encoder", value);
+        if(value > -20){
+            frameRate(value + 20)
+        }
     }
 
     this.addShape = function() {
