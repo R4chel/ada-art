@@ -37,7 +37,6 @@ function Art(canvas) {
                 numPoints: this.numPoints,
                 noise: this.noise,
             });
-        console.log(s.center);
         this.shapes.push(s);
     }
 
