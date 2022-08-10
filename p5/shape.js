@@ -24,9 +24,25 @@ function Shape({
 
     }
 
-    this.draw = function() {
+    this.draw = function({fillMode}) {
+        switch (fillMode){
+        case "noFill":
+            noFill();
+            break;
+        case "filled":
+            fill(toColor(this.color));
+            break;
+
+        case "whiteFill":
+            fill("white");
+            break;
+        case "randomOpacity":
+            fill(this.color.r, this.color.g,this.color.b, random(255));
+            break;
+
+
+        };
         stroke(toColor(this.color));
-        //fill(toColor(this.color));
         beginShape();
         for (let i = 0; i < numPoints; i++) {
             let theta = i * 2 * PI / numPoints;
@@ -43,7 +59,7 @@ function Shape({
         for (let i = 0; i < numPoints; i++) {
             
             let p = this.points[i];
-            let update = randomGaussian(this.radius - p.r, this.noise);
+            let update = randomGaussian(( this.radius - p.r ) / 2, this.noise);
             p.r += update;
             if(p.r + this.radius < 5){
                 p.r += 5;

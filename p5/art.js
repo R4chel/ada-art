@@ -6,10 +6,13 @@ function Art(canvas) {
     this.colorIndex = 0;
     this.numPoints = 50;
     this.noise = 5;
+    this.fillModes = ["filled", "noFill", "whiteFill", "randomOpacity"]
+    this.fillModeIndex = 0;
+
 
     this.draw = function() {
         for (let i = 0; i < this.shapes.length; i++) {
-            this.shapes[i].draw();
+            this.shapes[i].draw({fillMode: this.fillModes[this.fillModeIndex]});
         }
     }
 
@@ -49,6 +52,8 @@ function Art(canvas) {
                 this.addShape();
                 break;
             case 1:
+            this.fillModeIndex = (this.fillModeIndex + 1) % this.fillModes.length;
+            break;
             case 2:
             case 3:
             case 4:
