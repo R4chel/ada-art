@@ -73,24 +73,6 @@ function Shape({
         switch (shapeKind) {
             case "square":
             return r * min(1/abs(cos(theta)), 1/abs(sin(theta)))
-            //     if (theta > 2 * PI || theta < 0) {
-            //         console.log("oops", theta);
-            //         return r;
-            //     }
-            //     if (theta > 0 && theta < PI / 4 || theta > 7 * PI / 4) {
-            //         return r / cos(theta);
-            //     }
-            //     if (theta > PI / 4 && theta < 3 * PI / 4) {
-            //         return r / sin(theta);
-            //     }
-            //     if (theta > 3 * PI / 4 && theta < 5 * PI / 4) {
-            //         return r / cos(-theta);
-            //     }
-            //     if (theta > 5 * PI / 4 && theta < 5 * PI / 4) {
-            //         return r / cos(-theta);
-            //     }
-            // console.log("whattt", theta);
-            //     return r;
             case "heart":
                 return fancyHeart(r, theta + this.thetaOffset);
                 break;
