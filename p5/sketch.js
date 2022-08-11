@@ -6,8 +6,10 @@ let mic;
 let fft;
 let frequencies = ["bass", "lowMid", "mid", "highMid", "treble"];
 
-let seed = 0;
-let canvasSize = 1000;
+let seed;
+// seed = 0;
+let canvasSize;
+    // canvasSize = 1000;
 
 
 function setup() {
@@ -55,6 +57,7 @@ function on_update(update){
     }
 }
 
+let globalMax =0;
 
 function draw() {
 
@@ -65,9 +68,15 @@ function draw() {
 
     let amplitude = mic.getLevel();
 
-    // if(amplitude != 0){
-    //     console.log("amp:", amplitude);
-    // }
+    let maxSound = max(soundwave);
+    if(maxSound > globalMax){
+        globalMax = maxSound
+        console.log("LOUDER", globalMax);
+    }
+    if(amplitude != 0){
+        // console.log("amp:", amplitude);
+        // console.log("maxSound", maxSound);
+    }
     art.draw(soundwave, amplitude);
     art.update();
 }
