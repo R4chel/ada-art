@@ -4,6 +4,7 @@ function Shape({
     noise,
     numPoints,
     color,
+    
 
 }) {
     this.center = center;
@@ -11,6 +12,7 @@ function Shape({
     this.color = color;
     this.noise = noise;
     this.points = [];
+    this.thetaOffset = random(0, 2 * PI);
 
 
     this.onCreation = function() {
@@ -55,7 +57,7 @@ function Shape({
 
     }
 
-    this.drawSound = function({fillMode, soundwave, canvas }) {
+    this.drawSound = function({fillMode, soundwave, amplitude, canvas , min_radius}) {
         switch (fillMode){
         case "noFill":
             noFill();
@@ -75,10 +77,12 @@ function Shape({
         };
         stroke(toColor(this.color));
         beginShape();
+        // let radius = lerp(min_radius,this.radius, amplitude);
+        let radius = this.radius;
         for (let i = 0; i < soundwave.length; i++) {
+
             let theta = i * 2 * PI / soundwave.length;
-            let r = map( soundwave[i], -1, 1, 0, this.radius * 5);
-            console.log(r, soundwave[i]);
+            let r = map( soundwave[i], -1, 1, 0, radius * 5);
             let x = cos(theta) * (r) + this.center.x;
             let y = sin(theta) * ( r) + this.center.y;
             curveVertex(x, y);

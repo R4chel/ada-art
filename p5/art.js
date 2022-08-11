@@ -3,8 +3,8 @@ const NUM_COLOR_MODES = 8;
 function Art(canvas) {
     this.canvas = canvas;
     this.shapes = [];
-    this.minRadius = 5;
-    this.maxRadius = 100;
+    this.min_radius = 5;
+    this.max_radius = 100;
     this.colorIndex = 0;
     this.numPoints = 50;
     this.noise = 5;
@@ -14,12 +14,14 @@ function Art(canvas) {
 
 
 
-    this.draw = function(soundwave) {
+    this.draw = function(soundwave, amplitude) {
         for (let i = 0; i < this.shapes.length; i++) {
             this.shapes[i].drawSound({
                 fillMode: this.fillModes[this.fillModeIndex],
                 soundwave: soundwave,
-                canvas:  this.canvas
+                amplitude : amplitude * 100,
+                min_radius : this.min_radius ,
+                canvas:  this.canvas,
             });
         }
     }
@@ -48,7 +50,7 @@ function Art(canvas) {
         let s =
             new Shape({
                 center: this.canvas.randomPoint(),
-                radius: floor(random(this.minRadius, this.maxRadius + 1)),
+                radius: floor(random(this.min_radius, this.max_radius + 1)),
                 color: this.randomColor(),
                 numPoints: this.numPoints,
                 noise: this.noise,
@@ -87,11 +89,11 @@ function Art(canvas) {
         if (this.shapes.length == 0) {
             this.colorIndex = key;
             if (key > 6) {
-                this.minRadius += key;
-                this.maxRadius += key;
+                this.min_radius += key;
+                this.max_radius += key;
             } else {
-                this.minRadius -= key;
-                this.maxRadius -= key;
+                this.min_radius -= key;
+                this.max_radius -= key;
             }
             this.addShape();
         }
@@ -143,7 +145,6 @@ function Art(canvas) {
                     r: random(255), g: random(255), b: random(255)
                 };
 
-                console.log("TODO!", key);
         }
     }
 }
