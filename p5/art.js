@@ -2,22 +2,22 @@ const NUM_COLOR_MODES = 8;
 
 function Art(canvas) {
     this.canvas = canvas;
+    this.fillModes = ["filled", "noFill", "whiteFill", "randomOpacity"];
+    this.shapeModes = ["circle", "heart", "square", "rose"];
     this.shapes = [];
     this.min_radius = 5;
     this.max_radius = 100;
     this.colorIndex = 0;
     this.numPoints = 50;
     this.noise = 5;
-    this.fillModes = ["filled", "noFill", "whiteFill", "randomOpacity"]
     this.fillModeIndex = 2;
-    this.shapeModes = ["circle", "heart", "square"];
     this.shapeModeIndex = 0;
+    this.shapeOverride = true;
     this.move = true;
-
-    this.heart = false;
-
+    this.background = color(255);
 
     this.draw = function(soundwave, amplitude) {
+        let shapeKind = this.shapeOverride ? this.shapeModes[this.shapeModeIndex] : null;
         for (let i = 0; i < this.shapes.length; i++) {
             this.shapes[i].drawSound({
                 fillMode: this.fillModes[this.fillModeIndex],
@@ -25,7 +25,8 @@ function Art(canvas) {
                 amplitude : min( amplitude * 100 , 1.0),
                 min_radius : this.min_radius ,
                 canvas:  this.canvas,
-                shapeKind: this.shapeModes[this.shapeModeIndex],
+                shapeKind: shapeKind,
+
             });
         }
     }
@@ -58,11 +59,38 @@ function Art(canvas) {
                 color: this.randomColor(),
                 numPoints: this.numPoints,
                 noise: this.noise,
+                default_shape : random(this.shapeModes)
             });
         this.shapes.push(s);
     }
 
-    
+    this.reset = function(){
+        this.shapes = [];
+        this.min_radius = 5;
+        this.max_radius = 100;
+        this.colorIndex = 0;
+        this.numPoints = 50;
+        this.noise = 5;
+        this.fillModeIndex = 2;
+        this.shapeModeIndex = 0;
+        this.shapeOverride = true;
+        this.move = true;
+        this.background = color(255);
+
+        background(255);
+
+    }
+
+    this.validateRadii = function() {
+        if(this.min_radius < 0){
+            this.min_radius = 6;
+        }
+        if(this.min_radius <this.max_radius){
+            this.max_radius += 5;
+            this.min_radius -= 5;
+        }
+        
+    }
     this.keyPress = function(key) {
         console.log("TODO", key);
         switch (key) {
@@ -74,7 +102,11 @@ function Art(canvas) {
                 break;
 
         case 3:
+            this.shapeOverride = true;
             this.shapeModeIndex= ( this.shapeModeIndex +1 ) % this.shapeModes.length;
+            break;
+        case 4:
+            this.shapeOverride = !this.shapeOverride;
             break;
 
             case 9:
@@ -85,17 +117,27 @@ function Art(canvas) {
                 this.move = !this.move;
                 break;
             case 11:
+            this.reset();
+            break;
             case 2:
-            case 4:
             case 5:
+            this.min_radius += floor(random(5));
+            this.max_radius += floor(random(5));
+            this.validateRadii();
+            break;
             case 6:
+            this.min_radius -= floor(random(5));
+            this.max_radius -= floor(random(5));
+            this.validateRadii();
+            break;
             case 7:
             case 8:
             default:
                 console.log("TODO!", key);
         }
-        if (this.shapes.length == 0) {
+        if (this.shapes.length == 0 && key != 11) {
             this.colorIndex = key;
+            this.shapeModeIndex = random(floor(this.shapeModes.length));
             if (key > 6) {
                 this.min_radius += key;
                 this.max_radius += key;

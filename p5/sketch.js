@@ -22,6 +22,7 @@ function setup() {
     rectMode(RADIUS);
     let canvas = new Canvas(canvasWidth, canvasHeight); 
     art = new Art(canvas);
+    art.reset();
 
     port = "/dev/tty.usbmodem1103";
     // port = "/dev/tty.usbmodem103";

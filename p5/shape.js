@@ -4,6 +4,7 @@ function Shape({
     noise,
     numPoints,
     color,
+    default_shape,
 
 
 }) {
@@ -13,6 +14,8 @@ function Shape({
     this.noise = noise;
     this.points = [];
     this.thetaOffset = random(0, 2 * PI);
+    this.b = floor(random(2,6));
+    this.default_shape_kind = default_shape;
 
     this.onCreation = function() {
         for (let i = 0; i < numPoints; i++) {
@@ -71,8 +74,10 @@ function Shape({
 
     this.rByShape = function(shapeKind, r, theta) {
         switch (shapeKind) {
+        case "rose":
+            return r*sin(this.b * theta)
             case "square":
-            return r * min(1/abs(cos(theta)), 1/abs(sin(theta)))
+                return r * min(1 / abs(cos(theta)), 1 / abs(sin(theta)))
             case "heart":
                 return fancyHeart(r, theta + this.thetaOffset);
                 break;
@@ -92,6 +97,7 @@ function Shape({
         min_radius,
         shapeKind
     }) {
+        shapeKind = shapeKind == null? this.default_shape_kind : shapeKind; 
         this.drawColors(fillMode);
         stroke(toColor(this.color));
         beginShape();
