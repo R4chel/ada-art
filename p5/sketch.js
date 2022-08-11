@@ -28,7 +28,7 @@ function setup() {
     connection = new Connection(on_update);
     connectionSetup(connection, port);
 
-    let smoothing = 1.0;
+    let smoothing = 0.8;
     mic = new p5.AudioIn();
     fft = new p5.FFT(smoothing);
 
@@ -62,6 +62,7 @@ let globalMax =0;
 
 function draw() {
 
+    // console.log("level", mic.getLevel());
     // console.log("seed", seed);
 
     let spectrum = fft.analyze();
@@ -71,12 +72,11 @@ function draw() {
 
     let maxSound = max(soundwave);
     if(maxSound > globalMax){
-        globalMax = maxSound
-        console.log("LOUDER", globalMax);
-    }
-    if(amplitude != 0){
-        // console.log("amp:", amplitude);
-        // console.log("maxSound", maxSound);
+        globalMax = maxSound;
+        console.log("LOUDER", globalMax, amplitude);
+        if(maxSound == 1){
+            maxSound = 0;
+        }
     }
     art.draw(soundwave, amplitude);
     art.update();

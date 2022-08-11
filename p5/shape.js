@@ -18,8 +18,6 @@ function Shape({
         for (let i = 0; i < numPoints; i++) {
             this.points.push(
                 { r : randomGaussian(0, this.noise) }
-               
-
             )
         }
 
@@ -65,11 +63,14 @@ function Shape({
         this.drawColors(fillMode);
         stroke(toColor(this.color));
         beginShape();
-        let radius = lerp(min_radius,this.radius, amplitude);
-        // let radius = this.radius;
+        let radius = this.radius;
+        if(amplitude != 0){
+            
+            radius =  lerp(min_radius,this.radius, amplitude);
+        }
         for (let i = 0; i < soundwave.length; i++) {
             let theta = i * 2 * PI / soundwave.length;
-            let r = map( soundwave[i], -1, 1, 0, radius * 5);
+            let r = map( soundwave[i], -1, 1, 0, radius*2);
             let x = cos(theta) * (r) + this.center.x;
             let y = sin(theta) * ( r) + this.center.y;
             curveVertex(x, y);

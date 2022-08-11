@@ -19,7 +19,7 @@ function Art(canvas) {
             this.shapes[i].drawSound({
                 fillMode: this.fillModes[this.fillModeIndex],
                 soundwave: soundwave,
-                amplitude : amplitude * 100,
+                amplitude : min( amplitude * 100 , 1.0),
                 min_radius : this.min_radius ,
                 canvas:  this.canvas,
             });
