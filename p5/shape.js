@@ -97,7 +97,7 @@ function Shape({
         min_radius,
         shapeKind
     }) {
-        shapeKind = shapeKind == null? this.default_shape_kind : shapeKind; 
+        shapeKind = shapeKind === undefined? this.default_shape_kind : shapeKind; 
         this.drawColors(fillMode);
         stroke(toColor(this.color));
         beginShape();
