@@ -2,12 +2,13 @@ let connection;
 let art;
 let debug = true;
 
-let mic, micLevel ;
+let mic;
 let fft;
 let frequencies = ["bass", "lowMid", "mid", "highMid", "treble"];
 
 let seed = 0;
 let canvasSize = 1000;
+
 
 function setup() {
     seed = seed === undefined ? floor(random(1000000)) : seed;
@@ -27,6 +28,7 @@ function setup() {
 
     mic = new p5.AudioIn();
     fft = new p5.FFT();
+
     mic.connect(fft);
 
     mic.start();
@@ -56,12 +58,16 @@ function on_update(update){
 
 function draw() {
 
-    console.log(seed);
+    // console.log("seed", seed);
 
     let spectrum = fft.analyze();
     let soundwave = fft.waveform();
+
     let amplitude = mic.getLevel();
 
+    // if(amplitude != 0){
+    //     console.log("amp:", amplitude);
+    // }
     art.draw(soundwave, amplitude);
     art.update();
 }

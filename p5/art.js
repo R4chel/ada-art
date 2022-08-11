@@ -9,7 +9,7 @@ function Art(canvas) {
     this.numPoints = 50;
     this.noise = 5;
     this.fillModes = ["filled", "noFill", "whiteFill", "randomOpacity"]
-    this.fillModeIndex = 0;
+    this.fillModeIndex = 2;
     this.move = true;
 
 

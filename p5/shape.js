@@ -77,12 +77,12 @@ function Shape({
         };
         stroke(toColor(this.color));
         beginShape();
-        // let radius = lerp(min_radius,this.radius, amplitude);
-        let radius = this.radius;
+        let radius = lerp(min_radius,this.radius, amplitude);
+        // let radius = this.radius;
         for (let i = 0; i < soundwave.length; i++) {
 
             let theta = i * 2 * PI / soundwave.length;
-            let r = map( soundwave[i], -1, 1, 0, radius * 5);
+            let r = map( soundwave[i] * 5, -1, 1, 0, radius * 5);
             let x = cos(theta) * (r) + this.center.x;
             let y = sin(theta) * ( r) + this.center.y;
             curveVertex(x, y);
