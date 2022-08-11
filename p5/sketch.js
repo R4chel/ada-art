@@ -28,8 +28,9 @@ function setup() {
     connection = new Connection(on_update);
     connectionSetup(connection, port);
 
+    let smoothing = 1.0;
     mic = new p5.AudioIn();
-    fft = new p5.FFT();
+    fft = new p5.FFT(smoothing);
 
     mic.connect(fft);
 

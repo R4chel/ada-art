@@ -25,7 +25,7 @@ function Shape({
 
     }
 
-    this.drawColors(fillMode) {
+    this.drawColors = function(fillMode) {
         switch (fillMode){
         case "noFill":
             noFill();
@@ -46,6 +46,7 @@ function Shape({
         stroke(toColor(this.color));
         
     }
+
     this.draw = function({fillMode}) {
         this.drawColors(fillMode);
         beginShape();
@@ -62,6 +63,7 @@ function Shape({
 
     this.drawSound = function({fillMode, soundwave, amplitude, canvas , min_radius}) {
         this.drawColors(fillMode);
+        stroke(toColor(this.color));
         beginShape();
         let radius = lerp(min_radius,this.radius, amplitude);
         // let radius = this.radius;
