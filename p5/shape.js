@@ -66,7 +66,21 @@ function Shape({
         return r * scale;
     }
 
-    this.drawSound = function({fillMode, soundwave, amplitude, canvas , min_radius, drawHeart}) {
+
+    this.rByShape = function(shapeKind, r, theta){
+        switch(shapeKind){
+        case "heart":
+            return fancyHeart(r, theta + this.thetaOffset);
+            break;
+
+        case "circle":
+        default:
+            return r;
+            break;
+
+        }
+    }
+    this.drawSound = function({fillMode, soundwave, amplitude, canvas , min_radius, shapeKind}) {
         this.drawColors(fillMode);
         stroke(toColor(this.color));
         beginShape();
@@ -78,9 +92,7 @@ function Shape({
         for (let i = 0; i < soundwave.length; i++) {
             let theta = i * 2 * PI / soundwave.length;
             let r = map( soundwave[i], -1, 1, 0, radius*2);
-            if(drawHeart){
-                r = fancyHeart(r, theta + this.thetaOffset);
-            }
+            r= this.rByShape(shapeKind, r, theta);
             let x = cos(theta) * (r) + this.center.x;
             let y = sin(theta) * ( r) + this.center.y;
             curveVertex(x, y);

@@ -10,6 +10,8 @@ function Art(canvas) {
     this.noise = 5;
     this.fillModes = ["filled", "noFill", "whiteFill", "randomOpacity"]
     this.fillModeIndex = 2;
+    this.shapeModes = ["circle", "heart"];
+    this.shapeModeIndex = 0;
     this.move = true;
 
     this.heart = false;
@@ -23,7 +25,7 @@ function Art(canvas) {
                 amplitude : min( amplitude * 100 , 1.0),
                 min_radius : this.min_radius ,
                 canvas:  this.canvas,
-                drawHeart : this.heart,
+                shapeKind: this.shapeModes[this.shapeModeIndex],
             });
         }
     }
@@ -72,8 +74,7 @@ function Art(canvas) {
                 break;
 
         case 3:
-            this.heart = !this.heart;
-            console.log("heart", this.heart)
+            this.shapeModeIndex= ( this.shapeModeIndex +1 ) % this.shapeModes.length;
             break;
 
             case 9:
