@@ -22,9 +22,9 @@ function Art(canvas) {
             this.shapes[i].drawSound({
                 fillMode: this.fillModes[this.fillModeIndex],
                 soundwave: soundwave,
-                amplitude : min( amplitude * 100 , 1.0),
-                min_radius : this.min_radius ,
-                canvas:  this.canvas,
+                amplitude: min(amplitude * 100, 1.0),
+                min_radius: this.min_radius,
+                canvas: this.canvas,
                 shapeKind: shapeKind,
 
             });
@@ -59,12 +59,12 @@ function Art(canvas) {
                 color: this.randomColor(),
                 numPoints: this.numPoints,
                 noise: this.noise,
-                default_shape : random(this.shapeModes)
+                default_shape: random(this.shapeModes)
             });
         this.shapes.push(s);
     }
 
-    this.reset = function(){
+    this.reset = function() {
         this.shapes = [];
         this.min_radius = 5;
         this.max_radius = 100;
@@ -82,14 +82,14 @@ function Art(canvas) {
     }
 
     this.validateRadii = function() {
-        if(this.min_radius < 0){
+        if (this.min_radius < 0) {
             this.min_radius = 6;
         }
-        if(this.min_radius <this.max_radius){
+        if (this.min_radius < this.max_radius) {
             this.max_radius += 5;
             this.min_radius -= 5;
         }
-        
+
     }
     this.keyPress = function(key) {
         console.log("TODO", key);
@@ -101,35 +101,34 @@ function Art(canvas) {
                 this.fillModeIndex = (this.fillModeIndex + 1) % this.fillModes.length;
                 break;
 
-        case 3:
-            this.shapeOverride = true;
-            this.shapeModeIndex= ( this.shapeModeIndex +1 ) % this.shapeModes.length;
-            break;
-        case 4:
-            this.shapeOverride = !this.shapeOverride;
-            break;
+            case 3:
+                this.shapeOverride = true;
+                this.shapeModeIndex = (this.shapeModeIndex + 1) % this.shapeModes.length;
+                break;
+            case 4:
+                this.shapeOverride = !this.shapeOverride;
+                break;
+            case 5:
+                this.min_radius += floor(random(5));
+                this.max_radius += floor(random(5));
+                this.validateRadii();
+                break;
+            case 6:
+                this.min_radius -= floor(random(5));
+                this.max_radius -= floor(random(5));
+                this.validateRadii();
+                break;
 
             case 9:
-
                 this.colorIndex = (this.colorIndex + 1) % NUM_COLOR_MODES;
                 break;
             case 10:
                 this.move = !this.move;
                 break;
             case 11:
-            this.reset();
-            break;
+                this.reset();
+                break;
             case 2:
-            case 5:
-            this.min_radius += floor(random(5));
-            this.max_radius += floor(random(5));
-            this.validateRadii();
-            break;
-            case 6:
-            this.min_radius -= floor(random(5));
-            this.max_radius -= floor(random(5));
-            this.validateRadii();
-            break;
             case 7:
             case 8:
             default:
@@ -184,7 +183,7 @@ function Art(canvas) {
                     r: vals[1], g: vals[1], b: vals[1]
                 };
             case 7:
-            // IF YOU ADD THINGS HERE UPDATE NUM COLOR MODES 
+                // IF YOU ADD THINGS HERE UPDATE NUM COLOR MODES 
             case 8:
             case 9:
             case 10:
