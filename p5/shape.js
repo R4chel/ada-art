@@ -4,7 +4,7 @@ function Shape({
     noise,
     numPoints,
     color,
-    
+
 
 }) {
     this.center = center;
@@ -12,40 +12,42 @@ function Shape({
     this.color = color;
     this.noise = noise;
     this.points = [];
-    this.thetaOffset = random(0,2*PI);
+    this.thetaOffset = random(0, 2 * PI);
 
     this.onCreation = function() {
         for (let i = 0; i < numPoints; i++) {
-            this.points.push(
-                { r : randomGaussian(0, this.noise) }
-            )
+            this.points.push({
+                r: randomGaussian(0, this.noise)
+            })
         }
 
     }
 
     this.drawColors = function(fillMode) {
-        switch (fillMode){
-        case "noFill":
-            noFill();
-            break;
-        case "filled":
-            fill(toColor(this.color));
-            break;
+        switch (fillMode) {
+            case "noFill":
+                noFill();
+                break;
+            case "filled":
+                fill(toColor(this.color));
+                break;
 
-        case "whiteFill":
-            fill("white");
-            break;
-        case "randomOpacity":
-            fill(this.color.r, this.color.g,this.color.b, random(255));
-            break;
+            case "whiteFill":
+                fill("white");
+                break;
+            case "randomOpacity":
+                fill(this.color.r, this.color.g, this.color.b, random(255));
+                break;
 
 
         };
         stroke(toColor(this.color));
-        
+
     }
 
-    this.draw = function({fillMode}) {
+    this.draw = function({
+        fillMode
+    }) {
         this.drawColors(fillMode);
         beginShape();
         for (let i = 0; i < numPoints; i++) {
@@ -67,60 +69,87 @@ function Shape({
     }
 
 
-    this.rByShape = function(shapeKind, r, theta){
-        switch(shapeKind){
-        case "heart":
-            return fancyHeart(r, theta + this.thetaOffset);
-            break;
+    this.rByShape = function(shapeKind, r, theta) {
+        switch (shapeKind) {
+            case "square":
+            return r * min(1/abs(cos(theta)), 1/abs(sin(theta)))
+            //     if (theta > 2 * PI || theta < 0) {
+            //         console.log("oops", theta);
+            //         return r;
+            //     }
+            //     if (theta > 0 && theta < PI / 4 || theta > 7 * PI / 4) {
+            //         return r / cos(theta);
+            //     }
+            //     if (theta > PI / 4 && theta < 3 * PI / 4) {
+            //         return r / sin(theta);
+            //     }
+            //     if (theta > 3 * PI / 4 && theta < 5 * PI / 4) {
+            //         return r / cos(-theta);
+            //     }
+            //     if (theta > 5 * PI / 4 && theta < 5 * PI / 4) {
+            //         return r / cos(-theta);
+            //     }
+            // console.log("whattt", theta);
+            //     return r;
+            case "heart":
+                return fancyHeart(r, theta + this.thetaOffset);
+                break;
 
-        case "circle":
-        default:
-            return r;
-            break;
+            case "circle":
+            default:
+                return r;
+                break;
 
         }
     }
-    this.drawSound = function({fillMode, soundwave, amplitude, canvas , min_radius, shapeKind}) {
+    this.drawSound = function({
+        fillMode,
+        soundwave,
+        amplitude,
+        canvas,
+        min_radius,
+        shapeKind
+    }) {
         this.drawColors(fillMode);
         stroke(toColor(this.color));
         beginShape();
         let radius = this.radius;
-        if(amplitude != 0){
-            
-            radius =  lerp(min_radius,this.radius, amplitude);
+        if (amplitude != 0) {
+
+            radius = lerp(min_radius, this.radius, amplitude);
         }
         for (let i = 0; i < soundwave.length; i++) {
             let theta = i * 2 * PI / soundwave.length;
-            let r = map( soundwave[i], -1, 1, 0, radius*2);
-            r= this.rByShape(shapeKind, r, theta);
+            let r = map(soundwave[i], -1, 1, 0, radius * 2);
+            r = this.rByShape(shapeKind, r, theta);
             let x = cos(theta) * (r) + this.center.x;
-            let y = sin(theta) * ( r) + this.center.y;
+            let y = sin(theta) * (r) + this.center.y;
             curveVertex(x, y);
-        } 
+        }
         endShape(CLOSE);
 
     }
-    this.update = function(canvas){
+    this.update = function(canvas) {
         for (let i = 0; i < numPoints; i++) {
-            
+
             let p = this.points[i];
             let update_mean =
-                (p.r > 2 * radius || p.r < radius / 2) ? ( this.radius - p.r ) / 2 : 0;
+                (p.r > 2 * radius || p.r < radius / 2) ? (this.radius - p.r) / 2 : 0;
             let update = randomGaussian(update_mean, this.noise);
             p.r += update;
-            if(p.r + this.radius < 5){
+            if (p.r + this.radius < 5) {
                 p.r += 5;
             }
         }
 
         let center_x_update = randomGaussian(0, this.noise);
         let center_y_update = randomGaussian(0, this.noise);
-        this.center.x = constrain(center.x+center_x_update, 0, canvas.width);
-        this.center.y = constrain(center.y+center_y_update, 0, canvas.height);
-        this.thetaOffset += random(-PI/10,PI/10);
+        this.center.x = constrain(center.x + center_x_update, 0, canvas.width);
+        this.center.y = constrain(center.y + center_y_update, 0, canvas.height);
+        this.thetaOffset += random(-PI / 10, PI / 10);
 
-    } 
-    
+    }
+
     this.onCreation();
 
 }

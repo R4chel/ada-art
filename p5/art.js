@@ -10,7 +10,7 @@ function Art(canvas) {
     this.noise = 5;
     this.fillModes = ["filled", "noFill", "whiteFill", "randomOpacity"]
     this.fillModeIndex = 2;
-    this.shapeModes = ["circle", "heart"];
+    this.shapeModes = ["circle", "heart", "square"];
     this.shapeModeIndex = 0;
     this.move = true;
 
