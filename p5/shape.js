@@ -12,7 +12,7 @@ function Shape({
     this.color = color;
     this.noise = noise;
     this.points = [];
-
+    this.thetaOffset = random(0,2*PI);
 
     this.onCreation = function() {
         for (let i = 0; i < numPoints; i++) {
@@ -59,7 +59,14 @@ function Shape({
 
     }
 
-    this.drawSound = function({fillMode, soundwave, amplitude, canvas , min_radius}) {
+    function fancyHeart(scale, t) {
+        // source : https://pavpanchekha.com/blog/heart-polar-coordinates.html
+        // note: looks bad if numPoints < 360
+        let r = (Math.sin(t) * Math.sqrt(Math.abs(Math.cos(t)))) / (Math.sin(t) + 7 / 5) - 2 * Math.sin(t) + 2;
+        return r * scale;
+    }
+
+    this.drawSound = function({fillMode, soundwave, amplitude, canvas , min_radius, drawHeart}) {
         this.drawColors(fillMode);
         stroke(toColor(this.color));
         beginShape();
@@ -71,6 +78,9 @@ function Shape({
         for (let i = 0; i < soundwave.length; i++) {
             let theta = i * 2 * PI / soundwave.length;
             let r = map( soundwave[i], -1, 1, 0, radius*2);
+            if(drawHeart){
+                r = fancyHeart(r, theta + this.thetaOffset);
+            }
             let x = cos(theta) * (r) + this.center.x;
             let y = sin(theta) * ( r) + this.center.y;
             curveVertex(x, y);
@@ -95,6 +105,7 @@ function Shape({
         let center_y_update = randomGaussian(0, this.noise);
         this.center.x = constrain(center.x+center_x_update, 0, canvas.width);
         this.center.y = constrain(center.y+center_y_update, 0, canvas.height);
+        this.thetaOffset += random(-PI/10,PI/10);
 
     } 
     

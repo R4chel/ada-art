@@ -12,6 +12,7 @@ function Art(canvas) {
     this.fillModeIndex = 2;
     this.move = true;
 
+    this.heart = false;
 
 
     this.draw = function(soundwave, amplitude) {
@@ -22,6 +23,7 @@ function Art(canvas) {
                 amplitude : min( amplitude * 100 , 1.0),
                 min_radius : this.min_radius ,
                 canvas:  this.canvas,
+                drawHeart : this.heart,
             });
         }
     }
@@ -68,6 +70,12 @@ function Art(canvas) {
             case 1:
                 this.fillModeIndex = (this.fillModeIndex + 1) % this.fillModes.length;
                 break;
+
+        case 3:
+            this.heart = !this.heart;
+            console.log("heart", this.heart)
+            break;
+
             case 9:
 
                 this.colorIndex = (this.colorIndex + 1) % NUM_COLOR_MODES;
@@ -77,7 +85,6 @@ function Art(canvas) {
                 break;
             case 11:
             case 2:
-            case 3:
             case 4:
             case 5:
             case 6:
