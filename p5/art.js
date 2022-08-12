@@ -15,8 +15,12 @@ function Art(canvas) {
     this.shapeOverride = true;
     this.move = true;
     this.background = color(255);
+    this.drawBackground = false;
 
     this.draw = function(soundwave, amplitude) {
+        if(this.drawBackground){
+            background(this.background);
+        }
         let shapeKind = this.shapeOverride ? this.shapeModes[this.shapeModeIndex] : undefined;
         for (let i = 0; i < this.shapes.length; i++) {
             this.shapes[i].drawSound({
@@ -26,7 +30,6 @@ function Art(canvas) {
                 min_radius: this.min_radius,
                 canvas: this.canvas,
                 shapeKind: shapeKind,
-
             });
         }
     }
@@ -76,6 +79,7 @@ function Art(canvas) {
         this.shapeOverride = true;
         this.move = true;
         this.background = color(floor(random(255)));
+        this.drawBackground = false;
 
         background(this.background);
 
@@ -107,7 +111,6 @@ function Art(canvas) {
                 break;
             case 4:
                 this.shapeOverride = !this.shapeOverride;
-            console.log("override", this.shapeOverride)
                 break;
             case 5:
                 this.min_radius += floor(random(5));
@@ -119,7 +122,9 @@ function Art(canvas) {
                 this.max_radius -= floor(random(5));
                 this.validateRadii();
                 break;
-
+            case 7:
+            this.drawBackground = !this.drawBackground;
+            break;
             case 9:
                 this.colorIndex = (this.colorIndex + 1) % NUM_COLOR_MODES;
                 break;
@@ -128,9 +133,9 @@ function Art(canvas) {
                 break;
             case 11:
                 this.reset();
+            break;
                 break;
             case 2:
-            case 7:
             case 8:
             default:
                 console.log("TODO!", key);
