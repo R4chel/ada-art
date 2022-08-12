@@ -13,9 +13,9 @@ function Shape({
     this.color = color;
     this.noise = noise;
     this.thetaOffset = random(0, 2 * PI);
-    this.b = floor(random(2,6));
+    this.b = floor(random(2, 6));
     this.default_shape_kind = default_shape;
-    this.range= range;
+    this.range = range;
 
     this.drawColors = function(fillMode, frequencies) {
         switch (fillMode) {
@@ -32,10 +32,10 @@ function Shape({
             case "randomOpacity":
                 fill(this.color.r, this.color.g, this.color.b, random(255));
                 break;
-        case "frequency":
-            fill(frequencies[this.range])
+            case "frequency":
+                fill(frequencies[this.range])
 
-            break;
+                break;
 
 
         };
@@ -53,16 +53,25 @@ function Shape({
 
     this.rByShape = function(shapeKind, r, theta) {
         switch (shapeKind) {
-        case "rose":
-            return r*sin(this.b * theta)
+            case "inverseRose":
+            // this is wrong
+                return r * sin(theta/this.b);
+                break;
+            case "rose":
+                return r * sin(this.b * theta);
+                break;
             case "square":
-                return r * min(1 / abs(cos(theta)), 1 / abs(sin(theta)))
+                return r * min(1 / abs(cos(theta)), 1 / abs(sin(theta)));
+                break;
             case "heart":
-                return fancyHeart(r, theta + this.thetaOffset);
+                return fancyHeart(r, theta);
                 break;
 
             case "circle":
+                return r;
+                break;
             default:
+                console.log("unknown shape", shapeKind);
                 return r;
                 break;
 
@@ -80,7 +89,7 @@ function Shape({
 
 
     }) {
-        shapeKind = shapeKind === undefined? this.default_shape_kind : shapeKind; 
+        shapeKind = shapeKind === undefined ? this.default_shape_kind : shapeKind;
         this.drawColors(fillMode, frequencies);
         stroke(toColor(this.color));
         beginShape();
@@ -92,7 +101,7 @@ function Shape({
         for (let i = 0; i < soundwave.length; i++) {
             let theta = i * 2 * PI / soundwave.length;
             let r = map(soundwave[i], -1, 1, 0, radius * 2);
-            r = this.rByShape(shapeKind, r, theta);
+            r = this.rByShape(shapeKind, r, theta + this.thetaOffset);
             let x = cos(theta) * (r) + this.center.x;
             let y = sin(theta) * (r) + this.center.y;
             curveVertex(x, y);
@@ -101,20 +110,32 @@ function Shape({
 
     }
 
-    this.update = function({canvas, move, frequencies}) {
-        if(move)
-        {
+    this.update = function({
+        canvas,
+        move,
+        frequencies,
+        amplitude
+    }) {
+        if (move) {
+            let noise = this.noise;
+            let thetaDelta = PI / 10;
+            let frequency = frequencies[this.range];
+
+
+            noise = map(frequency, 0, 255, 0, this.noise * 5);
+            thetaDelta = 2 * PI * frequency / (255 * 2)
+
             let center_x_update = randomGaussian(0, this.noise);
             let center_y_update = randomGaussian(0, this.noise);
             this.center.x = constrain(center.x + center_x_update, 0, canvas.width);
             this.center.y = constrain(center.y + center_y_update, 0, canvas.height);
-            this.thetaOffset += random(-PI / 10, PI / 10);
+            this.thetaOffset += random(-thetaDelta, thetaDelta);
         }
-        
+
         let frequency = frequencies[this.range];
         let normalizedFrequency = map(frequency, 0, 255, -1, 1);
         // this.radius += normalizedFrequency;
-        
+
 
     }
 

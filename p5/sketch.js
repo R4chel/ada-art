@@ -78,7 +78,7 @@ function draw() {
     }
   
     art.draw(soundwave, amplitude, frequencies);
-    art.update(frequencies);
+    art.update(amplitude,frequencies);
 }
 
 

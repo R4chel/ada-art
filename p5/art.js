@@ -3,7 +3,7 @@ const NUM_COLOR_MODES = 8;
 function Art(canvas, ranges) {
     this.canvas = canvas;
     this.fillModes = ["filled", "noFill", "whiteFill", "randomOpacity", "frequency"];
-    this.shapeModes = ["circle", "heart", "square", "rose"];
+    this.shapeModes = ["circle", "heart", "square", "rose", "inverseRose"];
     this.shapes = [];
     this.min_radius = 5;
     this.max_radius = 100;
@@ -36,13 +36,15 @@ function Art(canvas, ranges) {
         }
     }
 
-    this.update = function(frequencies) {
+    this.update = function(amplitude, frequencies) {
 
         for (let i = 0; i < this.shapes.length; i++) {
             this.shapes[i].update({
                 canvas: this.canvas,
                 move: this.move,
-                frequencies: frequencies
+                frequencies: frequencies,
+                amplitude: min(amplitude * 100, 1.0),
+                
             });
         }
 
@@ -141,15 +143,17 @@ function Art(canvas, ranges) {
             case 11:
                 this.reset();
                 break;
-                break;
             case 2:
+            
+            console.log(this);
+            break;
             case 8:
             default:
                 console.log("TODO!", key);
         }
         if (this.shapes.length == 0 && key != 11) {
             this.colorIndex = key;
-            this.shapeModeIndex = random(floor(this.shapeModes.length));
+            this.shapeModeIndex = floor(random(this.shapeModes.length));
             if (key > 6) {
                 this.min_radius += key;
                 this.max_radius += key;
