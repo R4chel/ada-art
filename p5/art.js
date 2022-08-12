@@ -91,10 +91,10 @@ function Art(canvas, ranges) {
     }
 
     this.validateRadii = function() {
-        if (this.min_radius < 0) {
-            this.min_radius = 6;
+        if (this.min_radius <= 0) {
+            this.min_radius = floor(random(5,10));
         }
-        if (this.min_radius < this.max_radius) {
+        if (this.min_radius > this.max_radius) {
             this.max_radius += 5;
             this.min_radius -= 5;
         }
@@ -121,11 +121,13 @@ function Art(canvas, ranges) {
                 this.min_radius += floor(random(5));
                 this.max_radius += floor(random(5));
                 this.validateRadii();
+            console.log(this.min_radius, this.max_radius);
                 break;
             case 6:
                 this.min_radius -= floor(random(5));
                 this.max_radius -= floor(random(5));
                 this.validateRadii();
+            console.log(this.min_radius, this.max_radius);
                 break;
             case 7:
                 this.drawBackground = !this.drawBackground;
