@@ -1,8 +1,8 @@
 const NUM_COLOR_MODES = 8;
 
-function Art(canvas) {
+function Art(canvas, ranges) {
     this.canvas = canvas;
-    this.fillModes = ["filled", "noFill", "whiteFill", "randomOpacity"];
+    this.fillModes = ["filled", "noFill", "whiteFill", "randomOpacity", "frequency"];
     this.shapeModes = ["circle", "heart", "square", "rose"];
     this.shapes = [];
     this.min_radius = 5;
@@ -16,9 +16,10 @@ function Art(canvas) {
     this.move = true;
     this.background = color(255);
     this.drawBackground = false;
+    this.ranges = ranges;
 
     this.draw = function(soundwave, amplitude) {
-        if(this.drawBackground){
+        if (this.drawBackground) {
             background(this.background);
         }
         let shapeKind = this.shapeOverride ? this.shapeModes[this.shapeModeIndex] : undefined;
@@ -30,16 +31,19 @@ function Art(canvas) {
                 min_radius: this.min_radius,
                 canvas: this.canvas,
                 shapeKind: shapeKind,
+                frequencies: frequencies,
             });
         }
     }
 
-    this.update = function() {
-        if (this.move) {
+    this.update = function(frequencies) {
 
-            for (let i = 0; i < this.shapes.length; i++) {
-                this.shapes[i].update(this.canvas);
-            }
+        for (let i = 0; i < this.shapes.length; i++) {
+            this.shapes[i].update({
+                canvas: this.canvas,
+                move: this.move,
+                frequencies: frequencies
+            });
         }
 
     }
@@ -62,7 +66,8 @@ function Art(canvas) {
                 color: this.randomColor(),
                 numPoints: this.numPoints,
                 noise: this.noise,
-                default_shape: random(this.shapeModes)
+                default_shape: random(this.shapeModes),
+                range: random(this.ranges)
             });
         this.shapes.push(s);
     }
@@ -123,8 +128,8 @@ function Art(canvas) {
                 this.validateRadii();
                 break;
             case 7:
-            this.drawBackground = !this.drawBackground;
-            break;
+                this.drawBackground = !this.drawBackground;
+                break;
             case 9:
                 this.colorIndex = (this.colorIndex + 1) % NUM_COLOR_MODES;
                 break;
@@ -133,7 +138,7 @@ function Art(canvas) {
                 break;
             case 11:
                 this.reset();
-            break;
+                break;
                 break;
             case 2:
             case 8:

@@ -4,7 +4,8 @@ let debug = true;
 
 let mic;
 let fft;
-let frequencies = ["bass", "lowMid", "mid", "highMid", "treble"];
+let ranges = ["bass", "lowMid", "mid", "highMid", "treble"];
+let frequencies = new Object();
 
 let seed;
 // seed = 0;
@@ -21,7 +22,7 @@ function setup() {
     ellipseMode(RADIUS);
     rectMode(RADIUS);
     let canvas = new Canvas(canvasWidth, canvasHeight); 
-    art = new Art(canvas);
+    art = new Art(canvas, ranges);
     art.reset();
 
     port = "/dev/tty.usbmodem1103";
@@ -71,16 +72,13 @@ function draw() {
 
     let amplitude = mic.getLevel();
 
-    let maxSound = max(soundwave);
-    if(maxSound > globalMax){
-        globalMax = maxSound;
-        console.log("LOUDER", globalMax, amplitude);
-        if(maxSound == 1){
-            maxSound = 0;
-        }
+    for(let i = 0; i < ranges.length; i++){
+        let range = ranges[i];
+        frequencies[range] = fft.getEnergy(range);
     }
-    art.draw(soundwave, amplitude);
-    art.update();
+  
+    art.draw(soundwave, amplitude, frequencies);
+    art.update(frequencies);
 }
 
 
