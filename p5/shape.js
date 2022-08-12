@@ -12,19 +12,9 @@ function Shape({
     this.radius = radius;
     this.color = color;
     this.noise = noise;
-    this.points = [];
     this.thetaOffset = random(0, 2 * PI);
     this.b = floor(random(2,6));
     this.default_shape_kind = default_shape;
-
-    this.onCreation = function() {
-        for (let i = 0; i < numPoints; i++) {
-            this.points.push({
-                r: randomGaussian(0, this.noise)
-            })
-        }
-
-    }
 
     this.drawColors = function(fillMode) {
         switch (fillMode) {
@@ -45,22 +35,6 @@ function Shape({
 
         };
         stroke(toColor(this.color));
-
-    }
-
-    this.draw = function({
-        fillMode
-    }) {
-        this.drawColors(fillMode);
-        beginShape();
-        for (let i = 0; i < numPoints; i++) {
-            let theta = i * 2 * PI / numPoints;
-            let p = this.points[i];
-            let x = cos(theta) * (this.radius + p.r) + this.center.x;
-            let y = sin(theta) * (this.radius + p.r) + this.center.y;
-            curveVertex(x, y);
-        }
-        endShape(CLOSE);
 
     }
 
@@ -89,7 +63,8 @@ function Shape({
 
         }
     }
-    this.drawSound = function({
+
+    this.draw = function({
         fillMode,
         soundwave,
         amplitude,
@@ -117,18 +92,8 @@ function Shape({
         endShape(CLOSE);
 
     }
-    this.update = function(canvas) {
-        for (let i = 0; i < numPoints; i++) {
 
-            let p = this.points[i];
-            let update_mean =
-                (p.r > 2 * radius || p.r < radius / 2) ? (this.radius - p.r) / 2 : 0;
-            let update = randomGaussian(update_mean, this.noise);
-            p.r += update;
-            if (p.r + this.radius < 5) {
-                p.r += 5;
-            }
-        }
+    this.update = function(canvas) {
 
         let center_x_update = randomGaussian(0, this.noise);
         let center_y_update = randomGaussian(0, this.noise);
@@ -137,8 +102,6 @@ function Shape({
         this.thetaOffset += random(-PI / 10, PI / 10);
 
     }
-
-    this.onCreation();
 
 }
 

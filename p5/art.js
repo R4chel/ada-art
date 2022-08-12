@@ -23,7 +23,7 @@ function Art(canvas) {
         }
         let shapeKind = this.shapeOverride ? this.shapeModes[this.shapeModeIndex] : undefined;
         for (let i = 0; i < this.shapes.length; i++) {
-            this.shapes[i].drawSound({
+            this.shapes[i].draw({
                 fillMode: this.fillModes[this.fillModeIndex],
                 soundwave: soundwave,
                 amplitude: min(amplitude * 100, 1.0),
