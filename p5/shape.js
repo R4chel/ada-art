@@ -16,6 +16,7 @@ function Shape({
     this.b = floor(random(2, 6));
     this.default_shape_kind = default_shape;
     this.range = range;
+    console.log("new shape", this.b);
 
     this.drawColors = function(fillMode, frequencies) {
         switch (fillMode) {
@@ -55,7 +56,7 @@ function Shape({
         switch (shapeKind) {
             case "inverseRose":
             // this is wrong
-                return r * sin(theta/this.b);
+            return r * sin((this.b )  * theta/( this.b - 1 ));
                 break;
             case "rose":
                 return r * sin(this.b * theta);
@@ -66,7 +67,6 @@ function Shape({
             case "heart":
                 return fancyHeart(r, theta);
                 break;
-
             case "circle":
                 return r;
                 break;
@@ -74,6 +74,23 @@ function Shape({
                 console.log("unknown shape", shapeKind);
                 return r;
                 break;
+
+        }
+    }
+
+    this.period = function(shapeKind) {
+        switch (shapeKind) {
+        case "inverseRose":
+            // this is wrong
+            return 2 * PI *(this.b - 1);
+            break;
+        case "rose":
+        case "square":
+        case "heart":
+        case "circle":
+        default:
+            return 2 * PI;
+            break;
 
         }
     }
@@ -90,6 +107,7 @@ function Shape({
 
     }) {
         shapeKind = shapeKind === undefined ? this.default_shape_kind : shapeKind;
+        let period = this.period(shapeKind);
         this.drawColors(fillMode, frequencies);
         stroke(toColor(this.color));
         beginShape();
@@ -99,7 +117,7 @@ function Shape({
             radius = lerp(min_radius, this.radius, amplitude);
         }
         for (let i = 0; i < soundwave.length; i++) {
-            let theta = i * 2 * PI / soundwave.length;
+            let theta = i * period / soundwave.length;
             let r = map(soundwave[i], -1, 1, 0, radius * 2);
             r = this.rByShape(shapeKind, r, theta + this.thetaOffset);
             let x = cos(theta) * (r) + this.center.x;
