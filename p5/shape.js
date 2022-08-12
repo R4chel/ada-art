@@ -13,15 +13,16 @@ function Shape({
     this.color = color;
     this.noise = noise;
     this.thetaOffset = random(0, 2 * PI);
+    this.a = floor(random(3,8));
     this.b = floor(random(2, 6));
     this.default_shape_kind = default_shape;
     this.range = range;
-    console.log("new shape", this.b);
+    console.log("new shape", this.a , this.b);
 
     this.drawColors = function(fillMode, frequencies) {
         switch (fillMode) {
             case "noFill":
-                noFill();
+            noFill();
                 break;
             case "filled":
                 fill(toColor(this.color));
@@ -34,8 +35,7 @@ function Shape({
                 fill(this.color.r, this.color.g, this.color.b, random(255));
                 break;
             case "frequency":
-                fill(frequencies[this.range])
-
+                fill(frequencies[this.range]);
                 break;
 
 
@@ -54,6 +54,12 @@ function Shape({
 
     this.rByShape = function(shapeKind, r, theta) {
         switch (shapeKind) {
+        case "spiral":
+            return (this.r / this.a )*(1 + (this.b * theta));
+        case "star":
+            return r + this.a*sin(this.b * 2 * theta + PI / 2) ;
+            break;
+            
             case "inverseRose":
             // this is wrong
             return r * sin((this.b )  * theta/( this.b - 1 ));
@@ -80,10 +86,13 @@ function Shape({
 
     this.period = function(shapeKind) {
         switch (shapeKind) {
+        case "spiral":
+            return 2 * PI;
         case "inverseRose":
             // this is wrong
             return 2 * PI *(this.b - 1);
             break;
+        
         case "rose":
         case "square":
         case "heart":
@@ -124,7 +133,15 @@ function Shape({
             let y = sin(theta) * (r) + this.center.y;
             curveVertex(x, y);
         }
-        endShape(CLOSE);
+
+        switch (shapeKind) {
+        case "spiral":
+            endShape();
+            break;
+        default:
+            endShape(CLOSE);
+            break;
+        }
 
     }
 

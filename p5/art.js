@@ -3,7 +3,7 @@ const NUM_COLOR_MODES = 8;
 function Art(canvas, ranges) {
     this.canvas = canvas;
     this.fillModes = ["filled", "noFill", "whiteFill", "randomOpacity", "frequency"];
-    this.shapeModes = ["circle", "heart", "square", "rose", "inverseRose"];
+    this.shapeModes = ["circle", "heart", "square", "rose", "inverseRose", "spiral", "star"];
     this.shapes = [];
     this.min_radius = 5;
     this.max_radius = 100;
@@ -213,4 +213,26 @@ function Art(canvas, ranges) {
 
         }
     }
+}
+
+function weightedChoice(weightedList) {
+    let totalWeight = 0;
+
+    for (let i = 0; i < weightedList.length; i++) {
+        totalWeight += weightedList[i].weight;
+    }
+    let choice = floor(random(0, totalWeight));
+    let currentWeight = 0;
+    for (let i = 0; i < weightedList.length; i++) {
+        currentWeight += weightedList[i].weight;
+        if (currentWeight > choice) {
+            return weightedList[i].value;
+        }
+    }
+
+    console.error("Error choosing element from weighted list", {
+        choice: choice,
+        totalWeight: totalWeight,
+        weightedList: weightedList,
+    });
 }
