@@ -3,10 +3,10 @@ const NUM_COLOR_MODES = 8;
 function Art(canvas, ranges) {
     this.canvas = canvas;
     this.fillModes = ["filled", "noFill", "whiteFill", "randomOpacity", "frequency"];
-    this.shapeModes = ["circle", "heart", "square", "rose", "inverseRose", "spiral", "star"];
+    this.shapeModes = ["circle", "heart", "square", "rose", "inverseRose", "star"];
     this.shapes = [];
-    this.min_radius = 5;
-    this.max_radius = 100;
+    this.min_radius = floor(max(canvas.width, canvas.height) / 20);
+    this.max_radius = floor(max(canvas.width, canvas.height) / 5);
     this.colorIndex = 0;
     this.numPoints = 50;
     this.noise = 5;
@@ -17,6 +17,7 @@ function Art(canvas, ranges) {
     this.background = color(255);
     this.drawBackground = false;
     this.ranges = ranges;
+    this.rotate = true;
 
     this.draw = function(soundwave, amplitude) {
         if (this.drawBackground) {
@@ -32,6 +33,7 @@ function Art(canvas, ranges) {
                 canvas: this.canvas,
                 shapeKind: shapeKind,
                 frequencies: frequencies,
+                rotate : this.rotate,
             });
         }
     }
@@ -44,7 +46,7 @@ function Art(canvas, ranges) {
                 move: this.move,
                 frequencies: frequencies,
                 amplitude: min(amplitude * 100, 1.0),
-                
+
             });
         }
 
@@ -87,6 +89,7 @@ function Art(canvas, ranges) {
         this.move = true;
         this.background = color(floor(random(255)));
         this.drawBackground = false;
+        this.rotate = true;
 
         background(this.background);
 
@@ -94,7 +97,7 @@ function Art(canvas, ranges) {
 
     this.validateRadii = function() {
         if (this.min_radius <= 0) {
-            this.min_radius = floor(random(5,10));
+            this.min_radius = floor(random(5, 10));
         }
         if (this.min_radius > this.max_radius) {
             this.max_radius += 5;
@@ -112,6 +115,10 @@ function Art(canvas, ranges) {
                 this.fillModeIndex = (this.fillModeIndex + 1) % this.fillModes.length;
                 break;
 
+            case 2:
+                this.rotate = !this.rotate;
+                console.log(this);
+                break;
             case 3:
                 this.shapeOverride = true;
                 this.shapeModeIndex = (this.shapeModeIndex + 1) % this.shapeModes.length;
@@ -123,16 +130,24 @@ function Art(canvas, ranges) {
                 this.min_radius += floor(random(5));
                 this.max_radius += floor(random(5));
                 this.validateRadii();
-            console.log(this.min_radius, this.max_radius);
+                console.log(this.min_radius, this.max_radius);
                 break;
             case 6:
                 this.min_radius -= floor(random(5));
                 this.max_radius -= floor(random(5));
                 this.validateRadii();
-            console.log(this.min_radius, this.max_radius);
+                console.log(this.min_radius, this.max_radius);
                 break;
             case 7:
                 this.drawBackground = !this.drawBackground;
+                break;
+
+            case 8:
+                for (let i = 0; i < this.shapes.length; i++) {
+                    this.shapes[i].default_shape_kind = random(this.shapeModes);
+                }
+                this.shapeOverride = false;
+
                 break;
             case 9:
                 this.colorIndex = (this.colorIndex + 1) % NUM_COLOR_MODES;
@@ -143,11 +158,6 @@ function Art(canvas, ranges) {
             case 11:
                 this.reset();
                 break;
-            case 2:
-            
-            console.log(this);
-            break;
-            case 8:
             default:
                 console.log("TODO!", key);
         }

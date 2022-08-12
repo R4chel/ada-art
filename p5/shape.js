@@ -45,6 +45,7 @@ function Shape({
     }
 
     function fancyHeart(scale, t) {
+        t += PI;
         // source : https://pavpanchekha.com/blog/heart-polar-coordinates.html
         // note: looks bad if numPoints < 360
         let r = (Math.sin(t) * Math.sqrt(Math.abs(Math.cos(t)))) / (Math.sin(t) + 7 / 5) - 2 * Math.sin(t) + 2;
@@ -54,8 +55,6 @@ function Shape({
 
     this.rByShape = function(shapeKind, r, theta) {
         switch (shapeKind) {
-        case "spiral":
-            return (this.r / this.a )*(1 + (this.b * theta));
         case "star":
             return r + this.a*sin(this.b * 2 * theta + PI / 2) ;
             break;
@@ -111,7 +110,8 @@ function Shape({
         canvas,
         min_radius,
         shapeKind,
-        frequencies
+        frequencies,
+        rotate
 
 
     }) {
@@ -128,7 +128,8 @@ function Shape({
         for (let i = 0; i < soundwave.length; i++) {
             let theta = i * period / soundwave.length;
             let r = map(soundwave[i], -1, 1, 0, radius * 2);
-            r = this.rByShape(shapeKind, r, theta + this.thetaOffset);
+            let rotatedTheta = rotate ? theta + this.thetaOffset : theta; 
+            r = this.rByShape(shapeKind, r, rotatedTheta);
             let x = cos(theta) * (r) + this.center.x;
             let y = sin(theta) * (r) + this.center.y;
             curveVertex(x, y);
